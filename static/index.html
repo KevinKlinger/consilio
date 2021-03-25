@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <title>Consilio</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="script1.js" async></script>
+</head>
+
+<body>
+    <section>
+        <nav>
+            <ul>
+                <button class="navButton">Dashboard</button>
+                <button class="navButton">Item2</button>
+                <button class="navButton">Item3</button>
+            </ul>
+        </nav>
+
+        <article>
+            <form action="/">
+                <h1>Machine configuration</h1>
+                <div class="info" id="infobox">
+                    <label> Machine-Name: </label>
+                    <input type="text" name="name" placeholder="Name">
+                    <label> CPUs: </label>
+                    <input id="cpu" type="text" name="name" placeholder="CPU">
+                    <label> RAM: </label>
+                    <input type="text" name="name" placeholder="RAM">
+                    <label> Pool: </label>
+                    <input type="text" name="name" placeholder="Path">
+                    <label> OS Disk Template: </label>
+                    <input type="text" name="name" placeholder="Path">
+                    <label> CloudInit: </label>
+                    <input type="text" name="name" placeholder="Path">
+
+                    <button type="button" onclick=addDisk()>+</button>
+
+                    <!-- TODO:
+                        Additional Disks
+                        Cloud Init
+                    -->
+
+                </div>
+                <p>Message</p>
+                <div>
+                    <textarea rows="4"></textarea>
+                </div>
+                <button type="button" onclick=Quadrat()>Create HCL</button>
+            </form>
+        </article>
+    </section>
+</body>
+
+</html>
