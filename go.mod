@@ -4,6 +4,8 @@ go 1.14
 
 require (
 	github.com/dmacvicar/terraform-provider-libvirt v0.6.3
+	github.com/google/martian/v3 v3.0.0
+	github.com/hashicorp/hcl v1.0.0
 	github.com/hashicorp/terraform-plugin-sdk v1.16.1
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/pkg/errors v0.9.1

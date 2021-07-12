@@ -7,9 +7,10 @@
     <title>Consilio</title>
     <link rel="stylesheet" href="index.css">
     <script src="script1.js" async></script>
+    <script src="tabs.js"></script>
 </head>
 
-<body>
+<body onload="init();">
     <section>
         <nav>
             <ul>
@@ -21,6 +22,11 @@
 
         <article>
             <form action="/">
+
+                <div class="tab" id="resources">
+
+                </div>
+
                 <h1>Machine configuration</h1>
                 <div class="info" id="infobox">
                     <label> Machine-Name: </label>
@@ -48,7 +54,10 @@
                 <div>
                     <textarea rows="4"></textarea>
                 </div>
-                <button type="button" onclick=Quadrat()>Create HCL</button>
+                <button type="button">Create HCL</button>
+                <div class="info" id="generateNetwork">
+
+                </div>
             </form>
         </article>
     </section>
