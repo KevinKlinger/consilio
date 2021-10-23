@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<title>Consilio</title>
+		
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="icons.css">
+		<!--<script src="script1.js" async></script>
+		<script src="tabs.js"></script>-->
+	</head>
+	<body onload="init();">
+		<article id="main">
+			<h1>Consilio</h1>
+			<form action="/">
+				<h2>Configure your Machine:</h2>
+				
+				<label>
+					Machine-Name
+					<input type="text" name="inputName" placeholder="The name of your machine" class="icon iconServer">
+				</label>
+				
+				<section class="grouped-inputs">
+					<label>
+						CPUs
+						<input type="text" name="inputCpu" placeholder="Number of CPU cores" class="icon iconCpu">
+					</label>
+					
+					<label>
+						RAM
+						<input type="text" name="inputRam" placeholder="Amount of RAM" class="icon iconRam">
+					</label>
+				</section>
+				
+				<label>
+					Pool
+					<input type="text" name="inputPool" placeholder="Path to your pool" class="icon iconFolder">
+				</label>
+				
+				<label>
+					OS Disk Template
+					<input type="text" name="inputTemplate" placeholder="File path for your disk template" class="icon iconHarddrive">
+				</label>
+				
+				<label>
+					CloudInit
+					<input type="text" name="inputCloud" placeholder="Path" class="icon iconDatabase">
+				</label>
+				
+				<input type="button" onclick="addDisk()" value="Add a Disk" class="icon iconPlus">
+				
+				<label>
+					Message
+					<textarea rows="4" name="inputMessage" placeholder="Leave a message"></textarea>
+				</label>
+
+				<input type="button" value="Create HCL file" class="icon iconFile">
+			</form>
+			
+			<footer>
+				<p>Consolio is an Open-Source Project created by Jan Steffen Schaufelberger, Elham Fakharkazerooni and Kevin Klinger. Check for updates and find the source code on its <a href="https://github.com/KevinKlinger/consilio/" target="_blank">GitHub page</a>.</p>
+				<p>This project uses Icons by <a href="https://fontawesome.com/license/free" target="_blank">Font Awesome Free license</a></p>
+			</footer>
+		</article>
+	</body>
+</html>

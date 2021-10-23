@@ -1,0 +1,172 @@
+/*Page background*/
+html {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	font-family: calibri;
+	font-size: 16px;
+	color: #222;
+	background-color: #fff;
+	background: linear-gradient(0deg, #fafafa 0%, #fff 100%);
+}
+
+/*align #main to center and allow it to stretch to the bottom of the page no matter what */
+body {
+	padding: 0;
+	margin: 0;
+	min-height: 100%;
+	display : flex;
+	justify-content: center;
+}
+
+/* Main content container; aligns header and form to top and footer to bottom */
+#main {
+	background-color: #e9e9e9;
+	padding: 10px 50px;
+	width: 700px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 30px;
+}
+
+/* Remove white sidebars on narrow screens (such as mobile phones) */
+@media only screen and (max-width: 900px) {
+	#main {
+		width: 100%;
+	}
+}
+
+/* Big Header / Logo*/
+h1 {
+	padding: 20px;
+	margin: 0;
+	text-align: center;
+	font-size: 46px;
+	color: #333;
+	text-shadow: 0px 1px 0 #ccc;
+}
+
+/* Contains all input elements */
+form {
+	flex-grow: 1;	/* This grows the size of the container to include all space not used by the header and footer */
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 20px;
+}
+
+/* Sub-header within the Form */
+h2 {
+	font-weight: 400;
+	margin: 0;
+}
+
+/* <labels> act as a container for both their text and their input field so that both can be positioned/aligned as a pair */
+label {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	line-height: 25px;
+}
+
+/* to make two or more label + input combos appear on the same row we need a container around them to flex them horizontally... */
+.grouped-inputs {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	justify-content: space-between;
+}
+
+/* ...and and make the labels share the available space equally */
+.grouped-inputs label {
+	flex-grow: 1;
+}
+
+/* Don't allow horizontally paired inputs on very narrow screens (such as mobile phones) */
+@media only screen and (max-width: 700px) {
+	.grouped-inputs {
+		flex-direction: column;
+	}
+	.grouped-inputs label {
+		flex-grow: 0;
+	}
+}
+
+/* Text input fields */
+input[type=text], textarea {
+	font-family: calibri;
+	font-size: 16px;
+	padding: 8px;
+	min-width: 100px;
+	border-radius: 3px;
+	border: none;
+	outline: none;
+	resize: none;
+}
+
+/* Colorize placeholder text when empty */
+input[type=text]::placeholder, textarea::placeholder {
+	color: #444;
+}
+
+/* Reactive to mouse-over*/
+input[type=text]:hover, textarea:hover {
+	box-shadow: 0 3px 0 #ccc;
+}
+
+/* Reactive to being used */
+input[type=text]:focus, textarea:focus {
+	box-shadow: 0 3px 0 #66f;
+}
+
+/* Make placeholder text disappear as soon as input becomes focused */
+input[type=text]:focus::placeholder, textarea:focus::placeholder {
+	color: #fff;
+}
+
+/* Big blue buttons */
+button, input[type=button] {
+	width: 170px;
+	cursor: pointer;
+	border: none;
+	outline: none;
+	text-decoration: none;
+	padding: 8px 40px;
+	border-radius: 3px;
+	background-color: #55f;
+	color: white;
+	box-shadow: 0 3px 0 #22f;
+} 
+
+/* Reactive to mouse-over and focus*/
+button:hover, input[type=button]:hover, button:focus, input[type=button]:focus {
+	background-color: #66f;
+	box-shadow: 0 3px 0 #33f;
+}
+
+/* Reactive to being pressed; shift position down by 3px */
+button:active, input[type=button]:active {
+	position: relative;
+	top: 3px;
+	background-color: #33d;
+	box-shadow: none;
+}
+
+footer {
+	color: #444;
+	font-size: 12px;
+}
+
+footer p {
+	margin-top: 5px 0;
+}
+
+a, a:visited {
+	color: #33d;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
