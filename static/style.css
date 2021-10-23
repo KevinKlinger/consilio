@@ -3,7 +3,7 @@ html {
 	height: 100%;
 	padding: 0;
 	margin: 0;
-	font-family: calibri;
+	font-family: "Quicksand", calibri, verdana, arial;
 	font-size: 16px;
 	color: #222;
 	background-color: #fff;
@@ -95,7 +95,7 @@ label {
 
 /* Text input fields */
 input[type=text], textarea {
-	font-family: calibri;
+	font-family: "Quicksand", calibri, verdana, arial;
 	font-size: 16px;
 	padding: 8px;
 	min-width: 100px;
