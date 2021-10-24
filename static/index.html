@@ -13,7 +13,15 @@
 	<body onload="init();">
 		<article id="main">
 			<h1>Consilio</h1>
-			<form action="/">
+			<input type="radio" id="tab1" name="tabs" checked="checked" />
+			<input type="radio" id="tab2" name="tabs" />
+			<input type="radio" id="tab3" name="tabs" />
+			<nav>
+				<label for="tab1">Tab 1</label>
+				<label for="tab2">Tab 2</label>
+				<label for="tab3">Tab 3</label>
+			</nav>
+			<form action="/" class="tab1">
 				<h2>Configure your Machine:</h2>
 				
 				<label>
@@ -60,6 +68,14 @@
 				<input type="button" value="Create HCL file" class="icon iconFile">
 			</form>
 			
+			<form action="/" class="tab2">
+				<h2>Wow! A second tab! So much space!</h2>
+			</form>
+
+			<form action="/" class="tab3">
+				<h2>A third tab?!? This is getting ridicilous!</h2>
+			</form>
+
 			<footer>
 				<p>Consolio is an Open-Source Project created by Jan Steffen Schaufelberger, Elham Fakharkazerooni and Kevin Klinger. Check for updates and find the source code on its <a href="https://github.com/jansteffen/consilio" target="_blank">GitHub page</a>.</p>
 				<p>This project uses Icons by <a href="https://fontawesome.com/license/free" target="_blank">Font Awesome Free license</a> and the "Source Sans Pro" Font by <a href="https://fonts.google.com/" target="_blank">Google Web Fonts</a></p>

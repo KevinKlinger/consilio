@@ -55,6 +55,37 @@ h1 {
 	text-shadow: 0px 1px 0 #ccc;
 }
 
+nav {
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid #ccc;
+}
+
+input[type=radio] {
+	display: none;
+}
+
+nav label {
+	border-bottom: 2px solid #ccc;
+	padding: 8px 20px;
+}
+
+#tab1:checked ~ nav label[for=tab1],
+#tab2:checked ~ nav label[for=tab2],
+#tab3:checked ~ nav label[for=tab3] {
+	border-bottom: 4px solid #55f;
+}
+
+.tab1, .tab2, .tab3 {
+	display: none;
+}
+
+#tab1:checked ~ .tab1,
+#tab2:checked ~ .tab2,
+#tab3:checked ~ .tab3 {
+	display: flex;
+}
+
 /* Contains all input elements */
 form, #disks {
 	flex-grow: 1;	/* This grows the size of the container to include all space not used by the header and footer */
@@ -76,7 +107,7 @@ h2 {
 }
 
 /* <labels> act as a container for both their text and their input field so that both can be positioned/aligned as a pair */
-label {
+form label {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
