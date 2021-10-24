@@ -44,7 +44,7 @@ function addDisk() {
 
     let newDiskMenu = document.createElement('input');
     newDiskMenu.setAttribute("type", "text");
-    newDiskMenu.setAttribute("class", "icon iconDisk");
+    newDiskMenu.setAttribute("class", "icon iconHarddrive");
 
     newDiskLabel.appendChild(newDiskMenu);
     document.getElementById('disks').appendChild(newDiskLabel);
