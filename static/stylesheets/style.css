@@ -2,7 +2,7 @@
 :root {
 	--textColor: #222;
 	--textColorLight: #444;
-	--fontFamily: "Quicksand", calibri, verdana, arial;
+	--fontFamily: "Source Sans Pro", calibri, verdana, arial;
 	--gapSize: 20px;
 }
 
