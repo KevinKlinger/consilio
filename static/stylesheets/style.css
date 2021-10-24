@@ -48,7 +48,7 @@ h1 {
 }
 
 /* Contains all input elements */
-form {
+form, #disks {
 	flex-grow: 1;	/* This grows the size of the container to include all space not used by the header and footer */
 	display: flex;
 	flex-direction: column;

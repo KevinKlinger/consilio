@@ -6,10 +6,9 @@
 		<title>Consilio</title>
 		
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand&display=swap">
-		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="icons.css">
-		<!--<script src="script1.js" async></script>
-		<script src="tabs.js"></script>-->
+		<link rel="stylesheet" href="stylesheets/style.css">
+		<link rel="stylesheet" href="stylesheets/icons.css">
+		<script src="scripts/script.js" async></script>
 	</head>
 	<body onload="init();">
 		<article id="main">
@@ -51,6 +50,8 @@
 				
 				<input type="button" onclick="addDisk()" value="Add a Disk" class="icon iconPlus">
 				
+				<section id="disks"></section>
+
 				<label>
 					Message
 					<textarea rows="4" name="inputMessage" placeholder="Leave a message"></textarea>

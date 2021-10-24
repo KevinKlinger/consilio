@@ -113,6 +113,7 @@ section {
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
+  color: black;
 }
 
 /* Change background color of buttons on hover */
