@@ -3,7 +3,7 @@
 	--textColor: #222;
 	--textColorLight: #555;
 	--fontFamily: "Source Sans Pro", calibri, verdana, arial;
-	--gapSize: 20px;
+	--gapSize: 15px;
 }
 
 /*Page background*/
@@ -124,7 +124,7 @@ form label {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	line-height: 25px;
+	line-height: 30px;
 }
 
 /* to make two or more label + input combos appear on the same row we need a container around them to flex them horizontally... */
