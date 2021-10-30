@@ -7,6 +7,7 @@ async function init() {
   });
   logFields();
   //generateTabs();
+  switchTab();
 }
 
 // Fetches all allowed parametes of the given Terraform provider
@@ -22,7 +23,7 @@ async function fetchAvailableFields() {
     console.error("Error decoding JSON:", err)
   });
 
-  return fields
+  return fields;
 }
 
 //Prints all available fields and their subfields to browser console
@@ -37,20 +38,47 @@ function logFields() {
   });
 }
 
+//Switches the currently active tab
+function switchTab() {
+
+  //Read selected value from radio button
+  var checkedTab = document.querySelector('input[name="tabControl"]:checked').value; 
+
+  //fetch all available tabs
+  var allTabs = document.getElementsByClassName('tab');
+
+  //iterate through all available tabs
+  for (let currentTab of allTabs) {
+    //if current tab's name matches selected value, make it visible
+    if(currentTab.id == checkedTab) {                                                 
+      currentTab.style.display = "flex"; 
+    } else {
+      //if not, make it invisible
+      currentTab.style.display = "none";                                              
+    }
+  }
+}
+
 //Add a new input field for a new Disk to the form
 function addDisk() {
+
+    //create new Label element
     let newDiskLabel = document.createElement('label');
     newDiskLabel.innerHTML = "Disk:";
 
-    let newDiskMenu = document.createElement('input');
-    newDiskMenu.setAttribute("type", "text");
-    newDiskMenu.setAttribute("class", "icon iconHarddrive");
+    //create new text input element
+    let newDiskInput = document.createElement('input');
+    newDiskInput.setAttribute("type", "text");
+    newDiskInput.setAttribute("class", "icon iconHarddrive");
 
-    newDiskLabel.appendChild(newDiskMenu);
-    document.getElementById('disks').appendChild(newDiskLabel);
+    //insert text input element into label element
+    newDiskLabel.appendChild(newDiskInput);
+
+    //insert label element after buttonAddDisk
+    document.getElementById('buttonAddDisk').parentNode.insertBefore(newDiskLabel, document.getElementById('buttonAddDisk').nextSibling);
 
     console.log(newDiskLabel)
-    console.log(newDiskMenu)
+    console.log(newDiskInput)
 }
 
 /*

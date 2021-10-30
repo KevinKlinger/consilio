@@ -13,67 +13,69 @@
 	<body onload="init();">
 		<article id="main">
 			<h1>Consilio</h1>
-			<input type="radio" id="tab1" name="tabs" checked="checked" />
-			<input type="radio" id="tab2" name="tabs" />
-			<input type="radio" id="tab3" name="tabs" />
 			<nav>
-				<label for="tab1">Tab 1</label>
-				<label for="tab2">Tab 2</label>
-				<label for="tab3">Tab 3</label>
+				<input type="radio" value="tab1" id="tabController1" name="tabControl" onchange="switchTab();" checked="checked" />
+				<label for="tabController1">Tab 1</label>
+
+				<input type="radio" value="tab2" id="tabController2" name="tabControl" onchange="switchTab();" />
+				<label for="tabController2">Tab 2</label>
+
+				<input type="radio" value="tab3" id="tabController3" name="tabControl" onchange="switchTab();" />
+				<label for="tabController3">Tab 3</label>
 			</nav>
-			<form action="/" class="tab1">
-				<h2>Configure your Machine:</h2>
-				
-				<label>
-					Machine-Name
-					<input type="text" name="inputName" placeholder="The name of your machine" class="icon iconServer">
-				</label>
-				
-				<section class="grouped-inputs">
+			<form action="/">
+				<article class="tab" id="tab1">
+					<h2>Configure your Machine:</h2>
+					
 					<label>
-						CPUs
-						<input type="text" name="inputCpu" placeholder="Number of CPU cores" class="icon iconCpu">
+						Machine-Name
+						<input type="text" name="inputName" placeholder="The name of your machine" class="icon iconServer">
+					</label>
+					
+					<section class="grouped-inputs">
+						<label>
+							CPUs
+							<input type="text" name="inputCpu" placeholder="Number of CPU cores" class="icon iconCpu">
+						</label>
+						
+						<label>
+							RAM
+							<input type="text" name="inputRam" placeholder="Amount of RAM" class="icon iconRam">
+						</label>
+					</section>
+					
+					<label>
+						Pool
+						<input type="text" name="inputPool" placeholder="Path to your pool" class="icon iconFolder">
 					</label>
 					
 					<label>
-						RAM
-						<input type="text" name="inputRam" placeholder="Amount of RAM" class="icon iconRam">
+						OS Disk Template
+						<input type="text" name="inputTemplate" placeholder="File path for your disk template" class="icon iconHarddrive">
 					</label>
-				</section>
-				
-				<label>
-					Pool
-					<input type="text" name="inputPool" placeholder="Path to your pool" class="icon iconFolder">
-				</label>
-				
-				<label>
-					OS Disk Template
-					<input type="text" name="inputTemplate" placeholder="File path for your disk template" class="icon iconHarddrive">
-				</label>
-				
-				<label>
-					CloudInit
-					<input type="text" name="inputCloud" placeholder="Path" class="icon iconDatabase">
-				</label>
-				
-				<section id="disks">
-					<input type="button" onclick="addDisk()" value="Add a Disk" class="icon iconPlus">
-				</section>
+					
+					<label>
+						CloudInit
+						<input type="text" name="inputCloud" placeholder="Path" class="icon iconDatabase">
+					</label>
+					
+					<input type="button" id="buttonAddDisk" onclick="addDisk()" value="Add a Disk" class="icon iconPlus">
 
-				<label>
-					Message
-					<textarea rows="4" name="inputMessage" placeholder="Leave a message" class="icon iconMessage"></textarea>
-				</label>
+					<label>
+						Message
+						<textarea rows="4" name="inputMessage" placeholder="Leave a message" class="icon iconMessage"></textarea>
+					</label>
 
-				<input type="button" value="Create HCL file" class="icon iconFile">
-			</form>
-			
-			<form action="/" class="tab2">
-				<h2>Wow! A second tab! So much space!</h2>
-			</form>
+					<input type="button" value="Create HCL file" class="icon iconFile">
+				</article>
 
-			<form action="/" class="tab3">
-				<h2>A third tab?!? This is getting ridicilous!</h2>
+				<article class="tab" id="tab2">
+					<h2>Wow! A second tab! So much space!</h2>
+				</article>
+
+				<article class="tab" id="tab3">
+					<h2>A third tab?!? This is getting ridicilous!</h2>
+				</article>
 			</form>
 
 			<footer>
