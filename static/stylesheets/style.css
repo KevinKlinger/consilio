@@ -68,6 +68,7 @@ nav input[type=radio] {
 
 /* Inactive tab head */
 nav label {
+	cursor: pointer;
 	border-bottom: 2px solid #ccc;
 	padding: 4px;
 	flex-grow: 1;
@@ -75,10 +76,17 @@ nav label {
 	color: #888;
 }
 
+/* Highlight on mouse over */
+nav label:hover {
+	color: var(--textColorLight);
+	border-bottom: 4px solid #ccc;
+}
+
 /* Active tab head */
 nav input[type=radio]:checked+label {
+	cursor: default;
 	border-bottom: 4px solid #55f;
-	color: #000;
+	color: var(--textColor);
 }
 
 /* Inactive tab content */
