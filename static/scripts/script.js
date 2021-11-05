@@ -1,12 +1,16 @@
 var constFields;
+var nameReplacements = new Map();
 
 //Executed when page has finished loading
 async function init() {
 	await fetchAvailableFields().then( fields => {
 		constFields = fields;
 	});
-	logFields();
-	//generateTabs();
+
+	//logFields();
+    setNameReplacements();
+
+    generateInputFields();
 	switchTab();
 }
 
@@ -35,6 +39,109 @@ function logFields() {
 		field.Fields.forEach( subField => {
 			console.log("    - " + subField.Name);
 		})
+	});
+}
+
+//Create form input fields based on the recieved Json
+function generateInputFields() {
+    let i = 0; //number of Tabs
+	constFields.forEach(field => {
+        i++;
+
+        //Create invisible Radio button
+        let newTabHeadRadio = document.createElement('input');
+        newTabHeadRadio.setAttribute("type", "radio");
+        newTabHeadRadio.setAttribute("name", "tabControl");
+        newTabHeadRadio.setAttribute("id", "tabController" + i);
+        newTabHeadRadio.setAttribute("value", "tab" + i);
+        newTabHeadRadio.setAttribute("onChange", "switchTab();");
+
+        //Make first tab selected by default
+        if (i ==  1) {
+            newTabHeadRadio.setAttribute("checked", "checked");
+        }
+
+        //Create label element
+        let newTabHeadLabel = document.createElement('label');
+        newTabHeadLabel.setAttribute("for", newTabHeadRadio.id);
+        newTabHeadLabel.innerHTML = field.Name.split("_")[1];
+
+        //Create new tab content container
+        let newTabContent = document.createElement('article');
+        newTabContent.setAttribute("class", "tab");
+        newTabContent.setAttribute("id", "tab" + i);
+        newTabContent.innerHTML = field.Name;
+
+        //Add Tab header items to <nav>
+        document.querySelector('nav').appendChild(newTabHeadRadio);
+        document.querySelector('nav').appendChild(newTabHeadLabel);
+
+        //Add Tab header items to <form>
+        document.querySelector('form').appendChild(newTabContent);
+		
+        //Iterate through subfields to generate input elements
+		field.Fields.forEach( subField => {
+
+            //Create label element that also contains the input element
+			let newFormElementLabel = document.createElement('label');
+            newFormElementLabel.innerHTML = subField.Name;
+
+            //Create input element
+            let newFormElementInput;
+            
+            //Different type of input based on type given by JSON
+            switch (subField.Type) {
+                case "String":
+                    newFormElementInput = document.createElement('input');
+                    newFormElementInput.setAttribute("type", "text");
+                    break;
+
+                case "Int":
+                    newFormElementInput = document.createElement('input');
+                    newFormElementInput.setAttribute("type", "number");
+                    //newFormElementInput.setAttribute("pattern", "[0-9]"); //Make sure only numbers are allowed
+                    break;
+
+                case "Bool":
+                    newFormElementInput = document.createElement('input');
+                    newFormElementInput.setAttribute("type", "checkbox");
+
+                    newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark this label element to NOT use vertical flex alignment
+                    break;
+
+                case "List":
+                    newFormElementInput = document.createElement('select');
+
+                    //Iterate through list elements and add them to the <select> element
+                    subField.Subfields.forEach(listElement => {
+                        newListElement = document.createElement('option');
+                        newListElement.innerHTML = listElement.Name;
+                        newFormElementInput.appendChild(newListElement);
+                    });
+                    break;
+
+                default:    //Fallback (wtf is "map" ???)
+                    newFormElementInput = document.createElement('input');
+                    newFormElementInput.setAttribute("type", "text");
+                    break;
+            }
+
+            if (nameReplacements.has(field.Name + "." + subField.Name)) {
+                let replacements = nameReplacements.get(field.Name + "." + subField.Name);
+                newFormElementLabel.innerHTML = replacements.name;
+                newFormElementInput.setAttribute("placeholder", replacements.placeholder);
+                newFormElementInput.setAttribute("class", replacements.icon);
+            }
+
+            //Make elements required if the JSON specifies it
+            newFormElementInput.required = subField.Required;
+
+            //Add input element to label container
+            newFormElementLabel.appendChild(newFormElementInput);
+
+            //Add label (with input element included) to the current tab
+            document.getElementById("tab" + i).appendChild(newFormElementLabel);
+		});
 	});
 }
 
@@ -127,3 +234,15 @@ function getFieldsFor(desiredElement) {
 		 );
 	 });
 }*/
+
+//Pseudo Struct to allow us to hold three values for every key in a map
+function fieldDescriptions(name, placeholder, icon) {
+    this.name = name;
+    this.placeholder = placeholder;
+    this.icon = icon;
+}
+
+//Create each key-value pair for name replacements
+function setNameReplacements() {
+    nameReplacements.set("libvirt_domain.fw_cfg_name", new fieldDescriptions("config file CUSTOM NAME", "enter your forward configuration file", "icon iconFile"));
+}

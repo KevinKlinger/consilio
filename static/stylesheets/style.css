@@ -74,6 +74,7 @@ nav label {
 	flex-grow: 1;
 	text-align: center;
 	color: #888;
+    text-transform: capitalize;
 }
 
 /* Highlight on mouse over */
@@ -125,6 +126,17 @@ form label {
 	flex-direction: column;
 	align-items: stretch;
 	line-height: 30px;
+    text-transform: capitalize;
+}
+
+form label.forCheckbox {
+    flex-direction: row;
+}
+
+form label.forCheckbox input {
+    order: -1;
+    align-items: center;
+    gap: var(--gapSize);
 }
 
 /* to make two or more label + input combos appear on the same row we need a container around them to flex them horizontally... */
@@ -151,7 +163,8 @@ form label {
 }
 
 /* Text input fields */
-input[type=text], textarea {
+input[type=text], textarea, select, input[type=number] {
+    background-color: #fff;
 	font-family: var(--fontFamily);
 	font-size: 16px;
 	padding: 8px;
@@ -163,23 +176,46 @@ input[type=text], textarea {
 }
 
 /* Colorize placeholder text when empty */
-input[type=text]::placeholder, textarea::placeholder {
+input[type=text]::placeholder, textarea::placeholder, input[type=number]::placeholder {
 	color: var(--textColorLight);
 }
 
 /* Reactive to mouse-over*/
-input[type=text]:hover, textarea:hover {
+input[type=text]:hover, textarea:hover, select:hover, input[type=number]:hover {
 	box-shadow: 0 3px 0 #ccc;
 }
 
 /* Reactive to being used */
-input[type=text]:focus, textarea:focus {
+input[type=text]:focus, textarea:focus, select:focus, input[type=number]:focus {
 	box-shadow: 0 3px 0 #66f;
 }
 
 /* Make placeholder text disappear as soon as input becomes focused */
-input[type=text]:focus::placeholder, textarea:focus::placeholder {
+input[type=text]:focus::placeholder, textarea:focus::placeholder, input[type=number]:focus::placeholder {
 	color: #fff;
+}
+
+input[type=checkbox] {
+    appearance: none;
+    margin: 0;
+    margin-right: 12px;
+
+    width: 16px;
+    height: 16px;
+
+    background-color: #fff;
+    padding: 8px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+
+    transform: translateY(7px);
+}
+input[type=checkbox]:hover {
+    box-shadow: 0 3px 0 #ccc;
+}
+input[type=checkbox]:checked {
+    background-color: #55f;
 }
 
 /* Big blue buttons */
