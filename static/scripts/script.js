@@ -33,10 +33,10 @@ async function fetchAvailableFields() {
 //Prints all available fields and their subfields to browser console
 function logFields() {
 	console.log("Available Fields:");
-	constFields.forEach(field => {
-		console.log(" - " + field.Name);
+	constFields.forEach(category => {
+		console.log(" - " + category.Name);
 		
-		field.Fields.forEach( subField => {
+		category.Fields.forEach( subField => {
 			console.log("    - " + subField.Name);
 		})
 	});
@@ -44,8 +44,8 @@ function logFields() {
 
 //Create form input fields based on the recieved Json
 function generateInputFields() {
-    let i = 0; //number of Tabs
-	constFields.forEach(field => {
+    let i = 0; //keep track of number of Tabs
+	constFields.forEach(category => {
         i++;
 
         //Create invisible Radio button
@@ -64,13 +64,13 @@ function generateInputFields() {
         //Create label element
         let newTabHeadLabel = document.createElement('label');
         newTabHeadLabel.setAttribute("for", newTabHeadRadio.id);
-        newTabHeadLabel.innerHTML = field.Name.split("_")[1];
+        newTabHeadLabel.innerHTML = category.Name.split("_")[1];
 
         //Create new tab content container
         let newTabContent = document.createElement('article');
         newTabContent.setAttribute("class", "tab");
         newTabContent.setAttribute("id", "tab" + i);
-        newTabContent.innerHTML = field.Name;
+        newTabContent.innerHTML = category.Name;
 
         //Add Tab header items to <nav>
         document.querySelector('nav').appendChild(newTabHeadRadio);
@@ -80,69 +80,75 @@ function generateInputFields() {
         document.querySelector('form').appendChild(newTabContent);
 		
         //Iterate through subfields to generate input elements
-		field.Fields.forEach( subField => {
+		category.Fields.forEach( subField => {
 
-            //Create label element that also contains the input element
-			let newFormElementLabel = document.createElement('label');
-            newFormElementLabel.innerHTML = subField.Name;
-
-            //Create input element
-            let newFormElementInput;
-            
-            //Different type of input based on type given by JSON
-            switch (subField.Type) {
-                case "String":
-                    newFormElementInput = document.createElement('input');
-                    newFormElementInput.setAttribute("type", "text");
-                    break;
-
-                case "Int":
-                    newFormElementInput = document.createElement('input');
-                    newFormElementInput.setAttribute("type", "number");
-                    //newFormElementInput.setAttribute("pattern", "[0-9]"); //Make sure only numbers are allowed
-                    break;
-
-                case "Bool":
-                    newFormElementInput = document.createElement('input');
-                    newFormElementInput.setAttribute("type", "checkbox");
-
-                    newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark this label element to NOT use vertical flex alignment
-                    break;
-
-                case "List":
-                    newFormElementInput = document.createElement('select');
-
-                    //Iterate through list elements and add them to the <select> element
-                    subField.Subfields.forEach(listElement => {
-                        newListElement = document.createElement('option');
-                        newListElement.innerHTML = listElement.Name;
-                        newFormElementInput.appendChild(newListElement);
-                    });
-                    break;
-
-                default:    //Fallback (wtf is "map" ???)
-                    newFormElementInput = document.createElement('input');
-                    newFormElementInput.setAttribute("type", "text");
-                    break;
-            }
-
-            if (nameReplacements.has(field.Name + "." + subField.Name)) {
-                let replacements = nameReplacements.get(field.Name + "." + subField.Name);
-                newFormElementLabel.innerHTML = replacements.name;
-                newFormElementInput.setAttribute("placeholder", replacements.placeholder);
-                newFormElementInput.setAttribute("class", replacements.icon);
-            }
-
-            //Make elements required if the JSON specifies it
-            newFormElementInput.required = subField.Required;
-
-            //Add input element to label container
-            newFormElementLabel.appendChild(newFormElementInput);
-
-            //Add label (with input element included) to the current tab
-            document.getElementById("tab" + i).appendChild(newFormElementLabel);
+            //generate inputs based on current field and recursively generate subsequent subFields
+            generateInput(subField, category, document.getElementById("tab" + i));
 		});
 	});
+}
+
+function generateInput(currentField, category, parent) {
+    //Create label element that also contains the input element
+	let newFormElementLabel = document.createElement('label');
+    newFormElementLabel.innerHTML = currentField.Name;
+
+    //Create input element
+    let newFormElementInput;
+    
+    switch (currentField.Type) {
+        case "String":
+            newFormElementInput = document.createElement('input');
+            newFormElementInput.setAttribute("type", "text");
+            break;
+
+        case "Int":
+            newFormElementInput = document.createElement('input');
+            newFormElementInput.setAttribute("type", "number");
+            //newFormElementInput.setAttribute("pattern", "[0-9]"); //Make sure only numbers are allowed
+            break;
+
+        case "Bool":
+            newFormElementInput = document.createElement('input');
+            newFormElementInput.setAttribute("type", "checkbox");
+
+            newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark this label element to NOT use vertical flex alignment
+            break;
+
+        case "list":
+            newFormElementInput = document.createElement('input');
+            newFormElementInput.setAttribute("type", "hidden");
+            break;
+
+        default:    //Fallback (wtf is "map" ???)
+            newFormElementInput = document.createElement('input');
+            newFormElementInput.setAttribute("type", "text");
+            break;
+    }
+
+    if(!(currentField.Subfields == null)) {
+        //Has deeper subfields
+        newFormElementLabel.setAttribute("style", "background-color: red;");
+
+        //Iterate through subfields
+        currentField.Subfields.forEach(listElement => {
+            generateInput(listElement, category, newFormElementLabel);
+        });
+    }
+    if (nameReplacements.has(category.Name + "." + currentField.Name)) {
+        let replacements = nameReplacements.get(category.Name + "." + currentField.Name);
+        newFormElementLabel.innerHTML = replacements.name;
+        newFormElementInput.setAttribute("placeholder", replacements.placeholder);
+        newFormElementInput.setAttribute("class", replacements.icon);
+    }
+
+    //Make elements required if the JSON specifies it
+    newFormElementInput.required = currentField.Required;
+
+    //Add input element to label container
+    newFormElementLabel.appendChild(newFormElementInput);
+
+    parent.appendChild(newFormElementLabel);
 }
 
 //Switches the currently active tab
@@ -166,7 +172,7 @@ function switchTab() {
 	}
 }
 
-//Add a new input field for a new Disk to the form
+//Add a new input category for a new Disk to the form
 function addDisk() {
 
 	//create new Label element
@@ -190,22 +196,22 @@ function addDisk() {
 
 /*
 function generateTabs() {
-	constFields.forEach(field => {
+	constFields.forEach(category => {
 
 		let tab = document.createElement('button')
-		tab.innerHTML = field.Name
+		tab.innerHTML = category.Name
 		tab.className = "tablinks"
-		tab.id = field.Name
+		tab.id = category.Name
 
 		tab.onclick = function () {
-			openCity(event, field.Name)
+			openCity(event, category.Name)
 		}
 
 		document.getElementById('resources').appendChild(tab);
 
 
 		
-		field.Fields.forEach( subField => {
+		category.Fields.forEach( subField => {
 			let test = document.createElement('div')
 			test.innerHTML = subField.Name
 			test.className = "tabcontent"
@@ -224,11 +230,11 @@ function generateNetwork() {
 
 function getFieldsFor(desiredElement) {
 	 fetchAvailableFields().then( fields => {
-		 fields.forEach(field => 
+		 fields.forEach(category => 
 			 {
-				 if (field.Name == desiredElement) {
-					 console.log(field, "\n\n")
-					 return field
+				 if (category.Name == desiredElement) {
+					 console.log(category, "\n\n")
+					 return category
 				 }
 			 }
 		 );
