@@ -129,6 +129,10 @@ form label {
     text-transform: capitalize;
 }
 
+form label label {
+	margin-left: 40px;
+}
+
 form label.forCheckbox {
     flex-direction: row;
 }
@@ -168,7 +172,7 @@ input[type=text], textarea, select, input[type=number] {
 	font-family: var(--fontFamily);
 	font-size: 16px;
 	padding: 8px;
-	min-width: 100px;
+	min-width: 50px;
 	border-radius: 3px;
 	border: none;
 	outline: none;
