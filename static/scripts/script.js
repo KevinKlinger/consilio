@@ -115,7 +115,7 @@ function generateInput(currentField, category, parent) {
             newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark this label element to NOT use vertical flex alignment
             break;
 
-        case "list":
+        case "List":
             newFormElementInput = document.createElement('input');
             newFormElementInput.setAttribute("type", "hidden");
             break;
@@ -126,15 +126,22 @@ function generateInput(currentField, category, parent) {
             break;
     }
 
+    //Make elements required if the JSON specifies it
+    newFormElementInput.required = currentField.Required;
+
+    //Add input element to label container
+    newFormElementLabel.appendChild(newFormElementInput);
+
     if(!(currentField.Subfields == null)) {
         //Has deeper subfields
-        newFormElementLabel.setAttribute("style", "background-color: red;");
 
         //Iterate through subfields
         currentField.Subfields.forEach(listElement => {
             generateInput(listElement, category, newFormElementLabel);
         });
     }
+
+    //Check library for more human readable names + placeholder and icon
     if (nameReplacements.has(category.Name + "." + currentField.Name)) {
         let replacements = nameReplacements.get(category.Name + "." + currentField.Name);
         newFormElementLabel.innerHTML = replacements.name;
@@ -142,12 +149,7 @@ function generateInput(currentField, category, parent) {
         newFormElementInput.setAttribute("class", replacements.icon);
     }
 
-    //Make elements required if the JSON specifies it
-    newFormElementInput.required = currentField.Required;
-
-    //Add input element to label container
-    newFormElementLabel.appendChild(newFormElementInput);
-
+    //Add label element of currentField and all its children to parent
     parent.appendChild(newFormElementLabel);
 }
 
