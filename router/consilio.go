@@ -30,6 +30,12 @@ func (s *ConsilioRouter) routes() {
 	s.router.GET("/health", s.mw(s.handleGetHealth()))
 	s.router.GET("/version", s.mw(s.handleGetVersion()))
 
+	// Project endpoints
+	s.router.POST("/projects", s.mw(s.handleCreateProject()))
+	s.router.PUT("/projects/:id", s.mw(s.handleUpdateProject()))
+	s.router.GET("/projects/:id", s.mw(s.handleGetProject()))
+	s.router.GET("/projects", s.mw(s.handleGetAllProjects()))
+
 	// Action endpoints
 	// TODO receive config here and deploy/destroy/update with Terraform
 	s.router.GET("/test", s.mw(s.convertJSON()))

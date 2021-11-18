@@ -13,7 +13,7 @@ func (s *ConsilioRouter) handleGetService() httprouter.Handle {
 	return func(rw http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		rw.Header().Set("Content-Type", "application/json")
 		rw.WriteHeader(http.StatusOK)
-		_, _ = rw.Write([]byte("{\"service\":\"test\"}\n"))
+		_, _ = rw.Write([]byte("{\"service\":\"Consilio\"}\n"))
 	}
 }
 
