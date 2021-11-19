@@ -95,6 +95,8 @@ function generateInput(currentField, category, parent) {
 
     //Create input element
     let newFormElementInput;
+
+    let i = 0; //Counts the amount of fields with subfields for the purpose of assigning them IDs
     
     switch (currentField.Type) {
         case "String":
@@ -117,7 +119,9 @@ function generateInput(currentField, category, parent) {
 
         case "List":
             newFormElementInput = document.createElement('input');
-            newFormElementInput.setAttribute("type", "hidden");
+            newFormElementInput.setAttribute("type", "button");
+            newFormElementInput.setAttribute("value", "Add new " + currentField.Name + " Element");
+            newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + category.Name + "_" + currentField.Name + "_Subfield');");
             break;
 
         default:    //Fallback (wtf is "map" ???)
@@ -132,15 +136,6 @@ function generateInput(currentField, category, parent) {
     //Add input element to label container
     newFormElementLabel.appendChild(newFormElementInput);
 
-    if(!(currentField.Subfields == null)) {
-        //Has deeper subfields
-
-        //Iterate through subfields
-        currentField.Subfields.forEach(listElement => {
-            generateInput(listElement, category, newFormElementLabel);
-        });
-    }
-
     //Check library for more human readable names + placeholder and icon
     if (nameReplacements.has(category.Name + "." + currentField.Name)) {
         let replacements = nameReplacements.get(category.Name + "." + currentField.Name);
@@ -151,6 +146,49 @@ function generateInput(currentField, category, parent) {
 
     //Add label element of currentField and all its children to parent
     parent.appendChild(newFormElementLabel);
+
+    //Check if current field has deeper subfields
+    if(!(currentField.Subfields == null)) {
+        
+        //Create container for all subfields
+        let newSubfieldsContainer = document.createElement('section');
+        newSubfieldsContainer.setAttribute("class", "subfieldsContainer");
+        newSubfieldsContainer.setAttribute("id", category.Name + "_" + currentField.Name + "_Subfield");
+
+        //Iterate through subfields and generate them recursively
+        currentField.Subfields.forEach(listElement => {
+            generateInput(listElement, category, newSubfieldsContainer);
+        });
+
+        //Add subfield container to document
+        parent.appendChild(newSubfieldsContainer);
+    }
+}
+
+function duplicateSubfields(containerId) {
+    //Find original subfields container and clone it
+    subfieldContainer = document.getElementById(containerId).cloneNode(true);
+    //Remove identifying ID
+    subfieldContainer.removeAttribute("id");
+    subfieldContainer.setAttribute("class", "subfieldsContainer clone");
+
+    //Create a button that allows deleting the current set of extra subfields
+    let destroyButton = document.createElement("input");
+    destroyButton.setAttribute("type", "button");
+    destroyButton.setAttribute("class", "destroy");
+    destroyButton.setAttribute("value", "Remove this Element");
+    destroyButton.setAttribute("onclick", "destroySubfields(event)");
+
+    //add the destroy button to the <section>
+    subfieldContainer.appendChild(destroyButton);
+    
+    //Insert the new clone after the original
+    document.getElementById(containerId).after(subfieldContainer);
+}
+
+function destroySubfields(event) {
+    let button = event.target;
+    button.parentNode.remove();
 }
 
 //Switches the currently active tab

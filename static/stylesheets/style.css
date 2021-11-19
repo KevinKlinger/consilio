@@ -129,8 +129,16 @@ form label {
     text-transform: capitalize;
 }
 
-form label label {
-	margin-left: 40px;
+.subfieldsContainer {
+    display: flex;
+	flex-direction: column;
+	gap: var(--gapSize);
+	padding-left: 40px;
+}
+
+.clone {
+    border-top: 1px solid #333;
+    padding-top: 10px;
 }
 
 form label.forCheckbox {
@@ -224,12 +232,12 @@ input[type=checkbox]:checked {
 
 /* Big blue buttons */
 button, input[type=button] {
-	width: 170px;
+	width: 200px;
 	cursor: pointer;
 	border: none;
 	outline: none;
 	text-decoration: none;
-	padding: 8px 40px;
+	padding: 8px;
 	border-radius: 3px;
 	background-color: #55f;
 	color: white;
@@ -248,6 +256,11 @@ button:active, input[type=button]:active {
 	top: 3px;
 	background-color: #33d;
 	box-shadow: none;
+}
+
+input[type=button].destroy {
+    background-color: #a00;
+    box-shadow: 0 3px 0 #500;
 }
 
 footer {
