@@ -1,4 +1,4 @@
-input[type=text].icon, .icon {
+.icon, input[type=text].icon, input[type=button].icon {
 	background-repeat: no-repeat;
     padding-left: 40px;
     background-position: center left 12px;
