@@ -12,6 +12,8 @@ async function init() {
 
     generateInputFields();  //Generate the form based on the recieved JSON
 	switchTab();            //Make the first tab visible
+
+    document.querySelector('form').addEventListener('submit', handleSubmit); //enable pressing the submit button
 }
 
 // Fetches all allowed parametes of the given Terraform provider
@@ -45,6 +47,8 @@ function logFields() {
 //Create tabs and form input fields based on the recieved Json
 function generateInputFields() {
     let i = 0; //keep count of the number of Tabs
+
+    let form = document.querySelector('form');
 
     //iterate through all categorys and create a tab for each of them
 	constFields.forEach(category => { 
@@ -80,18 +84,18 @@ function generateInputFields() {
         newTabContent.innerHTML = category.Name;
 
         //Add Tab content items to <form>
-        document.querySelector('form').appendChild(newTabContent);
+        form.insertBefore(newTabContent, form.firstChild);
 		
         //Iterate through fields to generate input elements
 		category.Fields.forEach( currentField => {
 
             //generate inputs based on current field and recursively generate its child subFields
-            generateInput(currentField, category, document.getElementById("tab" + i));
+            generateInput(currentField, category.Name, document.getElementById("tab" + i));
 		});
 	});
 }
 
-function generateInput(currentField, category, parent) {
+function generateInput(currentField, path, parent) {
     //Create label element that also contains the input element
 	let newFormElementLabel = document.createElement('label');
     newFormElementLabel.innerHTML = currentField.Name;
@@ -121,11 +125,13 @@ function generateInput(currentField, category, parent) {
             break;
 
         case "List":        //List always has Subfields and requires a button to add additional subfields; Subfield generation happens later
+            newFormElementLabel.dataset.subfieldSets = 1;
+
             newFormElementInput = document.createElement('input');
             newFormElementInput.setAttribute("type", "button");
             newFormElementInput.setAttribute("class", "icon iconPlus");
             newFormElementInput.setAttribute("value", "Add new " + currentField.Name + " Element");
-            newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + category.Name + "_" + currentField.Name + "_Subfield');");
+            newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + path + "_" + currentField.Name + "_Subfield', event);");
             break;
 
         default:    //Fallback (wtf is "map" ???)
@@ -134,15 +140,18 @@ function generateInput(currentField, category, parent) {
             break;
     }
 
+    //add unique identifier to the input field
+    newFormElementInput.setAttribute("name", path + "." + currentField.Name);
+
     //Mark elements as required if the JSON specifies it
-    newFormElementInput.required = currentField.Required;
+    //newFormElementInput.required = currentField.Required;
 
     //Add input element to label container
     newFormElementLabel.appendChild(newFormElementInput);
 
     //Check library for more human readable names + placeholder and icon
-    if (nameReplacements.has(category.Name + "." + currentField.Name)) {
-        let replacements = nameReplacements.get(category.Name + "." + currentField.Name);
+    if (nameReplacements.has(path + "." + currentField.Name)) {
+        let replacements = nameReplacements.get(path + "." + currentField.Name);
         newFormElementLabel.innerHTML = replacements.name;
         newFormElementInput.setAttribute("placeholder", replacements.placeholder);
         newFormElementInput.setAttribute("class", replacements.icon);
@@ -157,11 +166,11 @@ function generateInput(currentField, category, parent) {
         //Create container elements for all subfields
         let newSubfieldsContainer = document.createElement('section');
         newSubfieldsContainer.setAttribute("class", "subfieldsContainer");
-        newSubfieldsContainer.setAttribute("id", category.Name + "_" + currentField.Name + "_Subfield");
+        newSubfieldsContainer.setAttribute("id", path + "_" + currentField.Name + "_Subfield");
 
         //Recursively iterate through subfields and generate them
         currentField.Subfields.forEach(listElement => {
-            generateInput(listElement, category, newSubfieldsContainer);
+            generateInput(listElement, path + "." + currentField.Name, newSubfieldsContainer);
         });
 
         //Add subfield container to document
@@ -170,7 +179,13 @@ function generateInput(currentField, category, parent) {
 }
 
 //Duplicate all Subfields of a List element
-function duplicateSubfields(containerId) {
+function duplicateSubfields(containerId, event) {
+
+    let button = event.target;  //Determine the excact button that was pressed
+    
+    let label = button.parentNode;                        //find the parent label element counting the amount of subfields
+    let i = parseInt(label.dataset.subfieldSets);     //read the current value
+    label.dataset.subfieldSets = i + 1;              //update the counter
 
     //Find original subfields container and clone it
     subfieldContainer = document.getElementById(containerId).cloneNode(true);
@@ -178,6 +193,15 @@ function duplicateSubfields(containerId) {
     //Remove identifying ID
     subfieldContainer.removeAttribute("id");
     subfieldContainer.setAttribute("class", "subfieldsContainer clone");
+
+    //Get a list of all input fields in this container
+    let allInputs = subfieldContainer.getElementsByTagName("input")
+    
+    //Iterate through all inputs of this subfield
+    for (inputElement of allInputs) {
+        inputElement.name += i;     //give them a unique name
+        inputElement.value = "";    //clean any existing input for the new copy
+    }
 
     //Create a button that allows user to destroy this set of extra subfields
     let destroyButton = document.createElement("input");
@@ -219,6 +243,21 @@ function switchTab() {
 		}
 	}
 }
+
+//when user presses submit
+function handleSubmit(event) {
+    alert("test");
+
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+
+    const value = Object.fromEntries(data.entries());
+
+    console.log({ value });
+}
+
+  
 
 //Add a new input category for a new Disk to the form
 function addDisk() {
