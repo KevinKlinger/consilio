@@ -16,7 +16,7 @@ async function init() {
     document.querySelector('form').addEventListener('submit', handleSubmit); //enable pressing the submit button
 }
 
-// Fetches all allowed parametes of the given Terraform provider
+// Fetches all allowed parameters of the given Terraform provider
 async function fetchAvailableFields() {
 	const response = await fetch('http://localhost:33334/api?provider=libvirt')
 	if (!response.ok) {
@@ -29,7 +29,7 @@ async function fetchAvailableFields() {
 		console.error("Error decoding JSON:", err)
 	});
 
-	return fields;
+	return fields.sort((a,b) => a.Name.localeCompare(b.Name));
 }
 
 //Debug function that prints all available fields and their subfields to browser console
