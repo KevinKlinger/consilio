@@ -262,6 +262,11 @@ function showPopup(){
     
 }
 
+function closePopup(){
+    var popUp = document.getElementById("popup");
+    popUp.style.display = "none";
+    
+}
 
 //Add a new input category for a new Disk to the form
 function addDisk() {
