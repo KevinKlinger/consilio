@@ -256,8 +256,12 @@ function handleSubmit(event) {
 
     console.log({ value });
 }
+function showPopup(){
+    var popUp = document.getElementById("popup");
+    popUp.style.display = "block";
+    
+}
 
-  
 
 //Add a new input category for a new Disk to the form
 function addDisk() {
@@ -280,6 +284,9 @@ function addDisk() {
 	console.log(newDiskLabel)
 	console.log(newDiskInput)
 }
+
+
+
 
 /*
 

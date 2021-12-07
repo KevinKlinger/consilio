@@ -84,6 +84,25 @@
 					<h2>A third tab?!? This is getting ridicilous!</h2>
 				</article> -->
 				<input type="submit" value="Create HCL file" class="icon iconFile" style="order: 2">
+				<div class="center">
+					<input type="button" id="importFile" value="import File" onclick="showPopup();">
+				</div>
+				<div id="popup" style="margin: auto;width: 50%;border: 3px solid black;border-radius: 12px; padding: 10px; display: none;">
+					<div id="close-btn" style="float: right;">&times;</div>
+					<div id="form">
+					  <h2 style="text-align:center;color:#222; margin:10px 0px 20px;font-size:25px;">Choose your File</h2>
+
+					  <div id="form-element" style="margin: auto;padding: 10px;">
+
+						<input type="file" id="fileElement">
+					  </div>
+					  <div id="form-element">
+						<input type="button" value="Cancel" style="margin-top: 20px; width: 20%; padding: 10px; float: right;">
+						<input type="button" value="Add" style="margin-right: 5px ;margin-top: 20px;width: 20%;padding: 10px;float: right;">
+					  </div>
+					</div>
+				</div>
+				  
 			</form>
 
 			<footer>
