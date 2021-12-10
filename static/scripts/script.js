@@ -40,6 +40,8 @@ async function prepareForm() {
     document.querySelector("#initialPrompt").remove();
     document.querySelector("#popup").classList.remove("active");
 
+    document.querySelector("form").style.display= "flex";
+
     //logFields();
     setNameReplacements();  //Prepare library of custom names for fields
     

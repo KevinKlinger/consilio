@@ -112,14 +112,15 @@ nav input[type=radio]:checked+label {
 
 #initialPrompt {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: var(--gapSize);
+    flex-grow: 1;
 }
 
 /* Contains all input elements */
 form {
 	flex-grow: 1;	/* This grows the size of the container to include all space not used by the header and footer, therefore pushing the footer to the bottom of the screen */
-	display: flex;
+	display: none;
 	flex-direction: column;
 	gap: 30px;
 }
@@ -254,7 +255,7 @@ button, input[type=button], input[type=submit] {
 } 
 
 /* Reactive to mouse-over and focus*/
-button:hover, input[type=button]:hover, button:focus, input[type=button]:focus, input[type=submit]:hover,, input[type=submit]:focus {
+button:hover, input[type=button]:hover, button:focus, input[type=button]:focus, input[type=submit]:hover, input[type=submit]:focus {
 	background-color: #66f;
 	box-shadow: 0 3px 0 #33f;
 }
