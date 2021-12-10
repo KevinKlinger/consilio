@@ -3,15 +3,48 @@ var nameReplacements = new Map();
 
 //Executed when page has finished loading
 async function init() {
-	await fetchAvailableFields().then( fields => {
-		constFields = fields;
-	});
 
-	//logFields();
+    //Add event listener for filepicker popup
+    document.querySelector("#openFromUrl").addEventListener("click",async function(){
+        await fetchAvailableFields().then( fields => {
+            constFields = fields;
+        });
+        prepareForm();
+    });
+
+    //Add event listener for filepicker popup
+    document.querySelector("#importFile").addEventListener("click",function(){
+        document.querySelector("#popup").classList.add("active");
+    });
+     
+    //Add event listener for popup close button
+    document.querySelector("#popup #close-btn").addEventListener("click",function(){
+        document.querySelector("#popup").classList.remove("active");
+    });
+
+    //Add event listener for file picker submit button
+    document.querySelector("#open-btn").addEventListener("click",function(){
+        var file_to_read = document.querySelector("#popup input[type=file]").files[0];
+        var fileread = new FileReader();
+        fileread.onload = function(e) {
+            var content = e.target.result;
+            constFields = JSON.parse(content); // parse json
+            prepareForm();
+        };
+        fileread.readAsText(file_to_read);
+    });
+}
+
+//After a JSON is opened by either method, this function will be called
+async function prepareForm() {
+    document.querySelector("#initialPrompt").remove();
+    document.querySelector("#popup").classList.remove("active");
+
+    //logFields();
     setNameReplacements();  //Prepare library of custom names for fields
-
+    
     generateInputFields();  //Generate the form based on the recieved JSON
-	switchTab();            //Make the first tab visible
+    switchTab();            //Make the first tab visible
 
     document.querySelector('form').addEventListener('submit', handleSubmit); //enable pressing the submit button
 }
@@ -257,12 +290,7 @@ function handleSubmit(event) {
     console.log({ value });
 }
 
-document.querySelector("#importFile").addEventListener("click",function(){
-    document.querySelector("#popup").classList.add("active");
-  });
-  document.querySelector("#popup #close-btn").addEventListener("click",function(){
-    document.querySelector("#popup").classList.remove("active");
-  });
+
 
 //Add a new input category for a new Disk to the form
 function addDisk() {

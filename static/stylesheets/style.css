@@ -110,6 +110,12 @@ nav input[type=radio]:checked+label {
   }
 }
 
+#initialPrompt {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gapSize);
+}
+
 /* Contains all input elements */
 form {
 	flex-grow: 1;	/* This grows the size of the container to include all space not used by the header and footer, therefore pushing the footer to the bottom of the screen */

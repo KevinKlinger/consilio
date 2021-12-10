@@ -14,95 +14,30 @@
 		<article class = "container" id="main">
 			<h1>Consilio</h1>
 			<nav>
-				<!-- <input type="radio" value="tab1" id="tabController1" name="tabControl" onchange="switchTab();" checked="checked" />
-				<label for="tabController1">Tab 1</label>
-
-				<input type="radio" value="tab2" id="tabController2" name="tabControl" onchange="switchTab();" />
-				<label for="tabController2">Tab 2</label>
-
-				<input type="radio" value="tab3" id="tabController3" name="tabControl" onchange="switchTab();" />
-				<label for="tabController3">Tab 3</label> -->
+				<!-- generate Tabbed navigation here -->
 			</nav>
+            <section id="initialPrompt">
+                <input type="button" id="importFile" value="Import File">
+                <input type="button" id="openFromUrl" value="Open from URL">
+            </section>
+            <div id="popup">
+                <div id="close-btn">&times;</div>
+                <div id="form">
+                  <h2>Choose your File</h2>
+
+                  <div id="form-element">
+                    <input type="file" id="fileElement">
+                  </div>
+                  <div id="form-element">
+                    <input type="button" value="Open File" id="open-btn">
+                  </div>
+                </div>
+            </div>
+
 			<form action="/">
-				<!--<article class="tab" id="tab1">
-					<h2>Configure your Machine:</h2>
-					
-					<label>
-						Machine-Name
-						<input type="text" name="inputName" placeholder="The name of your machine" class="icon iconServer">
-					</label>
-					
-					<section class="grouped-inputs">
-						<label>
-							CPUs
-							<input type="text" name="inputCpu" placeholder="Number of CPU cores" class="icon iconCpu">
-						</label>
-						
-						<label>
-							RAM
-							<input type="text" name="inputRam" placeholder="Amount of RAM" class="icon iconRam">
-						</label>
-					</section>
-					
-					<label>
-						Pool
-						<input type="text" name="inputPool" placeholder="Path to your pool" class="icon iconFolder">
-					</label>
+                <!-- generate form here -->
 
-                    <section class="subfieldsContainer" id="">
-                        <label>
-						    Pool
-					    	<input type="text" name="inputPool" placeholder="Path to your pool" class="icon iconFolder">
-					    </label>
-					</section>
-
-					<label>
-						OS Disk Template
-						<input type="text" name="inputTemplate" placeholder="File path for your disk template" class="icon iconHarddrive">
-					</label>
-					
-					<label>
-						CloudInit
-						<input type="text" name="inputCloud" placeholder="Path" class="icon iconDatabase">
-					</label>
-					
-					<input type="button" id="buttonAddDisk" onclick="addDisk()" value="Add a Disk" class="icon iconPlus">
-
-					<label>
-						Message
-						<textarea rows="4" name="inputMessage" placeholder="Leave a message" class="icon iconMessage"></textarea>
-					</label>
-
-					<input type="button" value="Create HCL file" class="icon iconFile">
-				</article>
-
-				<article class="tab" id="tab2">
-					<h2>Wow! A second tab! So much space!</h2>
-				</article>
-
-				<article class="tab" id="tab3">
-					<h2>A third tab?!? This is getting ridicilous!</h2>
-				</article> -->
 				<input type="submit" value="Create HCL file" class="icon iconFile" style="order: 2">
-				<div>
-					<input type="button" id="importFile" value="import File">
-				</div>
-
-
-				<div id="popup">
-					<div id="close-btn">&times;</div>
-					<div id="form">
-					  <h2>Choose your File</h2>
-
-					  <div id="form-element">
-						<input type="file" id="fileElement">
-					  </div>
-					  <div id="form-element">
-						<input type="button" value="Add" id="add-btn">
-					  </div>
-					</div>
-				</div>
-				  
 			</form>
 
 			<footer>
