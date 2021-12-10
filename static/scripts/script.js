@@ -281,7 +281,6 @@ function switchTab() {
 
 //when user presses submit
 function handleSubmit(event) {
-
     event.preventDefault();
 
     const data = new FormData(event.target);
@@ -289,7 +288,11 @@ function handleSubmit(event) {
     const value = Object.fromEntries(data.entries());
 
     console.log({ value });
-      
+
+    sendToServer({ value });
+}
+
+function sendToServer(content) {
     // Creating a XHR object
     let xhr = new XMLHttpRequest();
     let url = "localhost:33334/projects/<ID>";
@@ -299,24 +302,25 @@ function handleSubmit(event) {
   
     // Set the request header i.e. which type of content you are sending
     xhr.setRequestHeader("Content-Type", "application/json");
-  
+
     // Create a state change callback
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-  
+            alert("Success!");
             // Print received data from server
-            alert(this.responseText);
+            alert("Result: " + this.responseText);
+        } else {
+            alert("Not Success!");
         }
     };
-  
+    
     // Converting JSON data to string
-    var data = JSON.stringify({ value });
-  
+    var data = JSON.stringify({content});
+
     // Sending data with the request
     xhr.send(data);
 }
 
-/*
 //Add a new input category for a new Disk to the form
 function addDisk() {
 
@@ -339,6 +343,7 @@ function addDisk() {
 	console.log(newDiskInput)
 }
 
+/*
 function generateNetwork() {
     let networkField = await getFieldsFor("libvirt_network")
     networkField;
