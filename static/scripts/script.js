@@ -256,17 +256,13 @@ function handleSubmit(event) {
 
     console.log({ value });
 }
-function showPopup(){
-    var popUp = document.getElementById("popup");
-    popUp.style.display = "block";
-    
-}
 
-function closePopup(){
-    var popUp = document.getElementById("popup");
-    popUp.style.display = "none";
-    
-}
+document.querySelector("#importFile").addEventListener("click",function(){
+    document.querySelector("#popup").classList.add("active");
+  });
+  document.querySelector("#popup #close-btn").addEventListener("click",function(){
+    document.querySelector("#popup").classList.remove("active");
+  });
 
 //Add a new input category for a new Disk to the form
 function addDisk() {

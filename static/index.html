@@ -11,7 +11,7 @@
 		<script src="scripts/script.js" async></script>
 	</head>
 	<body onload="init();">
-		<article id="main">
+		<article class = "container" id="main">
 			<h1>Consilio</h1>
 			<nav>
 				<!-- <input type="radio" value="tab1" id="tabController1" name="tabControl" onchange="switchTab();" checked="checked" />
@@ -84,21 +84,21 @@
 					<h2>A third tab?!? This is getting ridicilous!</h2>
 				</article> -->
 				<input type="submit" value="Create HCL file" class="icon iconFile" style="order: 2">
-				<div class="center">
-					<input type="button" id="importFile" value="import File" onclick="showPopup();">
+				<div>
+					<input type="button" id="importFile" value="import File">
 				</div>
-				<div id="popup" style="margin: auto;width: 50%;border: 3px solid black;border-radius: 12px; padding: 10px; display: none;">
-					<div id="close-btn" style="float: right;" onclick="closePopup();">&times;</div>
+
+
+				<div id="popup">
+					<div id="close-btn">&times;</div>
 					<div id="form">
-					  <h2 style="text-align:center;color:#222; margin:10px 0px 20px;font-size:25px;">Choose your File</h2>
+					  <h2>Choose your File</h2>
 
-					  <div id="form-element" style="margin: auto;padding: 10px;">
-
+					  <div id="form-element">
 						<input type="file" id="fileElement">
 					  </div>
 					  <div id="form-element">
-						<input type="button" value="Cancel" style="margin-top: 20px; width: 20%; padding: 10px; float: right;">
-						<input type="button" value="Add" style="margin-right: 5px ;margin-top: 20px;width: 20%;padding: 10px;float: right;">
+						<input type="button" value="Add" id="add-btn">
 					  </div>
 					</div>
 				</div>
