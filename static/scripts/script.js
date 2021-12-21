@@ -27,8 +27,6 @@ async function init() {
 
 //After a JSON is opened by either method, this function will be called
 async function prepareForm() {
-    document.querySelector("#popup").classList.remove("active");
-
     setNameReplacements();  //Prepare library of custom names for fields
     
     generateInputFields();  //Generate the form based on the recieved JSON
@@ -138,7 +136,7 @@ function generateInput(currentField, path, parent) {
 
             newFormElementInput = document.createElement("input");
             newFormElementInput.type = "button";
-            newFormElementInput.class = "icon iconPlus";
+            newFormElementInput.setAttribute("class", "icon iconPlus");
             newFormElementInput.value = "Add new " + currentField.Name + " Element";
             newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + path + "_" + currentField.Name + "_Subfield', event);");
             break;
