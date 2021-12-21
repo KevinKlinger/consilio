@@ -4,13 +4,10 @@ var nameReplacements = new Map();
 //Executed when page has finished loading
 async function init() {
 
-    //Add event listener for filepicker popup
-    document.querySelector("#openFromUrl").addEventListener("click",async function(){
-        await fetchAvailableFields().then( fields => {
-            constFields = fields;
-        });
-        prepareForm();
+    await fetchAvailableFields().then( fields => {
+        constFields = fields;
     });
+    prepareForm();
 
     //Add event listener for filepicker popup
     document.querySelector("#importFile").addEventListener("click",function(){
