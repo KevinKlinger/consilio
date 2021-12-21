@@ -89,10 +89,10 @@ function generateInputFields() {
         //Create tab navigation
         //Create invisible Radio button
         let newTabHeadRadio = document.createElement('input');
-        newTabHeadRadio.setAttribute("type", "radio");
-        newTabHeadRadio.setAttribute("name", "tabControl");
-        newTabHeadRadio.setAttribute("id", "tabController" + i);
-        newTabHeadRadio.setAttribute("value", "tab" + i);
+        newTabHeadRadio.type = "radio";
+        newTabHeadRadio.name = "tabControl";
+        newTabHeadRadio.id = "tabController" + i;
+        newTabHeadRadio.value = "tab" + i;
         newTabHeadRadio.setAttribute("onChange", "switchTab();");
 
         //Mark the first tab as selected by default
@@ -103,7 +103,7 @@ function generateInputFields() {
         //Create clickable tab head
         let newTabHeadLabel = document.createElement('label');
         newTabHeadLabel.setAttribute("for", newTabHeadRadio.id);
-        newTabHeadLabel.innerHTML = category.Name.split("_")[1];
+        newTabHeadLabel.innerHTML = category.Name.replace("libvirt_", "");
 
         //Add Tab header items to <nav>
         document.querySelector('nav').appendChild(newTabHeadRadio);
@@ -112,14 +112,14 @@ function generateInputFields() {
         //Create new tab content container
         let newTabContent = document.createElement('article');
         newTabContent.setAttribute("class", "tab");
-        newTabContent.setAttribute("id", "tab" + i);
-        newTabContent.innerHTML = category.Name;
+        newTabContent.id = "tab" + i;
+        newTabContent.innerHTML = "<h2>" + category.Name + "</h2>";
 
         //Add Tab content items to <form>
         form.insertBefore(newTabContent, form.firstChild);
 		
         //Iterate through fields to generate input elements
-		category.Fields.forEach( currentField => {
+		category.Fields.sort((a,b) => a.Name.localeCompare(b.Name)).forEach( currentField => {
 
             //generate inputs based on current field and recursively generate its child subFields
             generateInput(currentField, category.Name, document.getElementById("tab" + i));
@@ -139,19 +139,19 @@ function generateInput(currentField, path, parent) {
     
     switch (currentField.Type) {
         case "String":      //Create a standard text box
-            newFormElementInput = document.createElement('input');
-            newFormElementInput.setAttribute("type", "text");
+            newFormElementInput = document.createElement("input");
+            newFormElementInput.type = "text";
             break;
 
         case "Int":         //Create a number selector
-            newFormElementInput = document.createElement('input');
-            newFormElementInput.setAttribute("type", "number");
+            newFormElementInput = document.createElement("input");
+            newFormElementInput.type = "number";
             //newFormElementInput.setAttribute("pattern", "[0-9]"); //Make sure only numbers are allowed
             break;
 
         case "Bool":        //Create a checkbox
-            newFormElementInput = document.createElement('input');
-            newFormElementInput.setAttribute("type", "checkbox");
+            newFormElementInput = document.createElement("input");
+            newFormElementInput.type = "checkbox";
 
             newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark this label element to NOT use vertical flex alignment
             break;
@@ -159,24 +159,24 @@ function generateInput(currentField, path, parent) {
         case "List":        //List always has Subfields and requires a button to add additional subfields; Subfield generation happens later
             newFormElementLabel.dataset.subfieldSets = 1;
 
-            newFormElementInput = document.createElement('input');
-            newFormElementInput.setAttribute("type", "button");
-            newFormElementInput.setAttribute("class", "icon iconPlus");
-            newFormElementInput.setAttribute("value", "Add new " + currentField.Name + " Element");
+            newFormElementInput = document.createElement("input");
+            newFormElementInput.type = "button";
+            newFormElementInput.class = "icon iconPlus";
+            newFormElementInput.value = "Add new " + currentField.Name + " Element";
             newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + path + "_" + currentField.Name + "_Subfield', event);");
             break;
 
         default:    //Fallback (wtf is "map" ???)
             newFormElementInput = document.createElement('input');
-            newFormElementInput.setAttribute("type", "text");
+            newFormElementInput.type = "text";
             break;
     }
 
     //add unique identifier to the input field
-    newFormElementInput.setAttribute("name", path + "." + currentField.Name);
+    newFormElementInput.name = path + "." + currentField.Name;
 
     //Mark elements as required if the JSON specifies it
-    //newFormElementInput.required = currentField.Required;
+    //newFormElementInput.required = currentField.Required; //Disabled for easier Debugging
 
     //Add input element to label container
     newFormElementLabel.appendChild(newFormElementInput);
@@ -185,7 +185,7 @@ function generateInput(currentField, path, parent) {
     if (nameReplacements.has(path + "." + currentField.Name)) {
         let replacements = nameReplacements.get(path + "." + currentField.Name);
         newFormElementLabel.innerHTML = replacements.name;
-        newFormElementInput.setAttribute("placeholder", replacements.placeholder);
+        newFormElementInput.placeholder = replacements.placeholder;
         newFormElementInput.setAttribute("class", replacements.icon);
     }
 
@@ -198,10 +198,10 @@ function generateInput(currentField, path, parent) {
         //Create container elements for all subfields
         let newSubfieldsContainer = document.createElement('section');
         newSubfieldsContainer.setAttribute("class", "subfieldsContainer");
-        newSubfieldsContainer.setAttribute("id", path + "_" + currentField.Name + "_Subfield");
+        newSubfieldsContainer.id = path + "_" + currentField.Name + "_Subfield";
 
         //Recursively iterate through subfields and generate them
-        currentField.Subfields.forEach(listElement => {
+        currentField.Subfields.sort((a,b) => a.Name.localeCompare(b.Name)).forEach(listElement => {
             generateInput(listElement, path + "." + currentField.Name, newSubfieldsContainer);
         });
 
@@ -232,14 +232,16 @@ function duplicateSubfields(containerId, event) {
     //Iterate through all inputs of this subfield
     for (inputElement of allInputs) {
         inputElement.name += i;     //give them a unique name
-        inputElement.value = "";    //clean any existing input for the new copy
+        if(inputElement.type != "button") {
+            inputElement.value = "";    //clean any existing value for the new copy, except for buttons
+        }
     }
 
     //Create a button that allows user to destroy this set of extra subfields
     let destroyButton = document.createElement("input");
-    destroyButton.setAttribute("type", "button");
+    destroyButton.type = "button";
+    destroyButton.value = "Remove this Element";
     destroyButton.setAttribute("class", "destroy");
-    destroyButton.setAttribute("value", "Remove this Element");
     destroyButton.setAttribute("onclick", "destroySubfields(event)");
 
     //add the destroy button to the <section>
@@ -307,7 +309,7 @@ function sendToServer(content) {
             // Print received data from server
             alert("Result: " + this.responseText);
         } else {
-            alert("Not Success!");
+            alert("Not Success! ReadyState: " + xhr.readyState + " status code: " + xhr.status);
         }
     };
     
