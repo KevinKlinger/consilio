@@ -39,7 +39,6 @@ async function prepareForm() {
 
     document.querySelector("form").style.display= "flex";
 
-    //logFields();
     setNameReplacements();  //Prepare library of custom names for fields
     
     generateInputFields();  //Generate the form based on the recieved JSON
@@ -62,18 +61,6 @@ async function fetchAvailableFields() {
 	});
 
 	return fields.sort((a,b) => a.Name.localeCompare(b.Name));
-}
-
-//Debug function that prints all available fields and their subfields to browser console
-function logFields() {
-	console.log("Available Fields:");
-	constFields.forEach(category => {
-		console.log(" - " + category.Name);
-		
-		category.Fields.forEach( subField => {
-			console.log("    - " + subField.Name);
-		})
-	});
 }
 
 //Create tabs and form input fields based on the recieved Json
@@ -319,48 +306,6 @@ function sendToServer(content) {
     // Sending data with the request
     xhr.send(data);
 }
-
-//Add a new input category for a new Disk to the form
-function addDisk() {
-
-	//create new Label element
-	let newDiskLabel = document.createElement('label');
-	newDiskLabel.innerHTML = "Disk:";
-
-	//create new text input element
-	let newDiskInput = document.createElement('input');
-	newDiskInput.setAttribute("type", "text");
-	newDiskInput.setAttribute("class", "icon iconHarddrive");
-
-    //insert text input element into label element
-	newDiskLabel.appendChild(newDiskInput);
-
-	//insert label element after buttonAddDisk
-	document.getElementById('buttonAddDisk').parentNode.insertBefore(newDiskLabel, document.getElementById('buttonAddDisk').nextSibling);
-
-	console.log(newDiskLabel)
-	console.log(newDiskInput)
-}
-
-/*
-function generateNetwork() {
-    let networkField = await getFieldsFor("libvirt_network")
-    networkField;
-    console.log(networkField)
-}
-
-function getFieldsFor(desiredElement) {
-	 fetchAvailableFields().then( fields => {
-		 fields.forEach(category => 
-			 {
-				 if (category.Name == desiredElement) {
-					 console.log(category, "\n\n")
-					 return category
-				 }
-			 }
-		 );
-	 });
-}*/
 
 //Pseudo Struct to allow us to hold three values for every key in a map
 function fieldDescriptions(name, placeholder, icon) {
