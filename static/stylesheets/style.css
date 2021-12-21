@@ -36,7 +36,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	gap: var(--gapSize);
+	gap: 20px;
 }
 
 /* Remove white sidebars on narrow screens (such as mobile phones) */
@@ -55,6 +55,27 @@ h1 {
 	color: var(--textColorLight);
 	text-shadow: 0px 1px 0 #ccc;
 }
+
+/* Row of buttons for imporing/exporting etc */
+#formControlls {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gapSize);
+}
+
+#formControlls input[type=file] {
+    display: none;
+}
+
+#formControlls label {
+    font-size: 14px;
+	cursor: pointer;
+	padding: 8px 8px 8px 40px;
+	border-radius: 3px;
+	background-color: #55f;
+	color: white;
+	box-shadow: 0 3px 0 #22f;
+} 
 
 /* Contains tab heads; align them horizontally */
 nav {
@@ -110,17 +131,10 @@ nav input[type=radio]:checked+label {
   }
 }
 
-#initialPrompt {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gapSize);
-    flex-grow: 1;
-}
-
 /* Contains all input elements */
 form {
 	flex-grow: 1;	/* This grows the size of the container to include all space not used by the header and footer, therefore pushing the footer to the bottom of the screen */
-	display: none;
+	display: flex;
 	flex-direction: column;
 	gap: 30px;
 }
@@ -128,7 +142,7 @@ form {
 /* Sub-header within the Form */
 h2 {
 	font-weight: 400;
-	margin: 0;
+	margin: 0px;
 }
 
 /* <labels> act as a container for both their text and their input field so that both can be positioned/aligned as a pair */
@@ -241,6 +255,8 @@ input[type=checkbox]:checked {
 
 /* Big blue buttons */
 button, input[type=button], input[type=submit] {
+    font-family: var(--fontFamily);
+    font-size: 14px;
 	align-self: flex-start;
     max-width: 300px;
 	cursor: pointer;
@@ -255,13 +271,13 @@ button, input[type=button], input[type=submit] {
 } 
 
 /* Reactive to mouse-over and focus*/
-button:hover, input[type=button]:hover, button:focus, input[type=button]:focus, input[type=submit]:hover, input[type=submit]:focus {
+button:hover, input[type=button]:hover, button:focus, input[type=button]:focus, input[type=submit]:hover, input[type=submit]:focus, #formControlls label:hover {
 	background-color: #66f;
 	box-shadow: 0 3px 0 #33f;
 }
 
 /* Reactive to being pressed; shift position down by 3px */
-button:active, input[type=button]:active, input[type=submit]:active {
+button:active, input[type=button]:active, input[type=submit]:active, #formControlls label:active {
 	position: relative;
 	top: 3px;
 	background-color: #33d;
@@ -295,59 +311,3 @@ a, a:visited {
 a:hover {
 	text-decoration: underline;
 }
-
-#popup {
-	position:absolute;
-	top:-150%;
-	left:50%;
-	opacity:0;
-	transform:translate(-50%,-50%) scale(1.25);
-	width:380px;
-	padding:20px 30px;
-	background:#fff;
-	border-radius:10px;
-	transition:top 0ms ease-in-out 200ms,
-			   opacity 200ms ease-in-out 0ms,
-			   transform 200ms ease-in-out 0ms; 
-  }
-
-  #popup.active {
-	top:50%;
-	opacity:1;
-	transform:translate(-50%,-50%) scale(1);
-	transition:top 0ms ease-in-out 0ms,
-			 	  	opacity 200ms ease-in-out 0ms,
-			   		transform 200ms ease-in-out 0ms;
-  }
-
-  #popup #close-btn {
-	position:absolute;
-	top:10px;
-	right:10px;
-	width:15px;
-	height:15px;
-	background:black;
-	color:white;
-	text-align:center;
-	line-height:15px;
-	border-radius:15px;
-	cursor:pointer;
-  } 
-
-  #popup #form h2 {
-	text-align:center;
-	color:#222;
-	margin:10px 0px 20px;
-	font-size:25px;
-  }
-
-  #popup #form #form-element #fileElement{
-	width:100%;
-	margin-top: 30px;
-  }
-
-  #popup #form #form-element #add-btn{
-	width:100%;
-	margin-top: 50px;
-	margin-left: 40px;
-  }

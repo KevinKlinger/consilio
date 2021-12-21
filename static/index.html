@@ -13,28 +13,16 @@
 	<body onload="init();">
 		<article class = "container" id="main">
 			<h1>Consilio</h1>
+
+            <section id="formControlls">
+                <label class="icon iconFolderWhite">Import config<input type="file" id="fileToImport"></label>
+                <input type="button" id="btn_saveFile" value="Save config" class="icon iconUploadWhite">
+                <input type="button" id="btn_submit" value="Submit to server" class="icon iconFloppyDiskWhite">
+            </section>
+
 			<nav>
 				<!-- generate Tabbed navigation here -->
 			</nav>
-            <section id="initialPrompt">
-                <h2>Choose JSON source:</h2>
-                <input type="button" id="importFile" value="Import File" class="icon iconFolderWhite">
-                <input type="button" id="openFromUrl" value="Open from URL" class="icon iconFile">
-            </section>
-
-            <div id="popup">
-                <div id="close-btn">&times;</div>
-                <div id="form">
-                  <h2>Choose your File</h2>
-
-                  <div id="form-element">
-                    <input type="file" id="fileElement">
-                  </div>
-                  <div id="form-element">
-                    <input type="button" value="Open File" id="open-btn">
-                  </div>
-                </div>
-            </div>
 
 			<form action="/">
                 <!-- generate form here -->

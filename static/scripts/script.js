@@ -9,35 +9,25 @@ async function init() {
     });
     prepareForm();
 
-    //Add event listener for filepicker popup
-    document.querySelector("#importFile").addEventListener("click",function(){
-        document.querySelector("#popup").classList.add("active");
-    });
-     
-    //Add event listener for popup close button
-    document.querySelector("#popup #close-btn").addEventListener("click",function(){
-        document.querySelector("#popup").classList.remove("active");
-    });
+    //Add event listener for file picker
+    let fileToImportInput = document.getElementById("fileToImport"); //get file picker element
+    fileToImportInput.onchange = function(){
+        var file_to_read = fileToImportInput.files[0];  //copy reference to selected file
+        var fileread = new FileReader();                //create file reader helper Object
 
-    //Add event listener for file picker submit button
-    document.querySelector("#open-btn").addEventListener("click",function(){
-        var file_to_read = document.querySelector("#popup input[type=file]").files[0];
-        var fileread = new FileReader();
-        fileread.onload = function(e) {
+        fileread.onload = function(e) {                 //Event triggered when file is finished loading
             var content = e.target.result;
-            constFields = JSON.parse(content); // parse json
-            prepareForm();
+            //constFields = JSON.parse(content); // parse json
+
+            //TODO: Implement importing of values
         };
-        fileread.readAsText(file_to_read);
-    });
+        fileread.readAsText(file_to_read);              //Load file
+    };
 }
 
 //After a JSON is opened by either method, this function will be called
 async function prepareForm() {
-    document.querySelector("#initialPrompt").remove();
     document.querySelector("#popup").classList.remove("active");
-
-    document.querySelector("form").style.display= "flex";
 
     setNameReplacements();  //Prepare library of custom names for fields
     
@@ -57,7 +47,7 @@ async function fetchAvailableFields() {
 
 	const fields = await response.json()
 	.catch(function(err){
-		console.error("Error decoding JSON:", err)
+		console.error("Error decoding JSON:", err);
 	});
 
 	return fields.sort((a,b) => a.Name.localeCompare(b.Name));
@@ -65,7 +55,7 @@ async function fetchAvailableFields() {
 
 //Create tabs and form input fields based on the recieved Json
 function generateInputFields() {
-    let i = 0; //keep count of the number of Tabs
+    let i = 0; //keep count of the number of Tabs for the purpose of assigning them IDs
 
     let form = document.querySelector('form');
 
@@ -90,7 +80,7 @@ function generateInputFields() {
         //Create clickable tab head
         let newTabHeadLabel = document.createElement('label');
         newTabHeadLabel.setAttribute("for", newTabHeadRadio.id);
-        newTabHeadLabel.innerHTML = category.Name.replace("libvirt_", "");
+        newTabHeadLabel.innerHTML = category.Name.replace("libvirt_", ""); //Trim out the "livbirt_" from the name for user readability
 
         //Add Tab header items to <nav>
         document.querySelector('nav').appendChild(newTabHeadRadio);
@@ -100,7 +90,7 @@ function generateInputFields() {
         let newTabContent = document.createElement('article');
         newTabContent.setAttribute("class", "tab");
         newTabContent.id = "tab" + i;
-        newTabContent.innerHTML = "<h2>" + category.Name + "</h2>";
+        //newTabContent.innerHTML = "<h2>" + category.Name + "</h2>";
 
         //Add Tab content items to <form>
         form.insertBefore(newTabContent, form.firstChild);
