@@ -28,6 +28,7 @@ async function init() {
     switchTab();            //Make the first tab visible
 
     document.querySelector('form').addEventListener('submit', handleSubmit); //enable pressing the submit button
+    document.querySelector('#btn_saveFile').addEventListener('click', handleSave); //enable pressing the submit button
 }
 
 /**  Fetches all allowed parameters of the given Terraform provider 
@@ -157,6 +158,9 @@ function generateInput(currentField, path, parent) {
     //Add input element to label container
     newFormElementLabel.appendChild(newFormElementInput);
 
+    //Save a referene to the input HTML element in the Object structure so that we can read its value later when User submits the form
+    currentField.inputPointer = newFormElementInput;
+
     //Add label element of currentField and all its children to parent
     parent.appendChild(newFormElementLabel);
 
@@ -264,6 +268,13 @@ function handleSubmit(event) {
     console.log({ value });
 
     sendToServer({ value });
+}
+
+function handleSave(event) {
+    var a = document.createElement("a");
+    a.href = window.URL.createObjectURL(new Blob(["CONTENT"], {type: "text/plain"}));
+    a.download = "demo.txt";
+    a.click(); 
 }
 
 function sendToServer(content) {
