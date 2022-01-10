@@ -148,8 +148,7 @@ function generateInput(currentField, path, parent) {
     newFormElementLabel.appendChild(newFormElementInput);
 
     //Save a referene to the input HTML element in the Object structure so that we can read its value later when User submits the form
-    currentField.inputPointer = newFormElementInput;
-    //currentField.value = currentField.inputPointer.value;
+    //currentField.inputPointer = newFormElementInput;
 
     //Add label element of currentField and all its children to parent
     parent.appendChild(newFormElementLabel);
@@ -312,46 +311,54 @@ function importFromFile(event) {
  * @returns {String} A JSON string representing the object structure with user input values
  */
 function serializeFormData() {
-    //let constFieldsClone = JSON.parse(JSON.stringify(constFields));
+    //Create deep clone of list of all fields to edit
+    let constFieldsClone = JSON.parse(JSON.stringify(constFields));
 
-    function readField(currentField) {
-        switch(currentField.Type) {
-            case "String":
-            case "Int":
-            case "Map":
-                currentField.value = currentField.inputPointer.value;
-                break;
+    //Recursively called function that finds corresponding HTML input field and reads its value
+    function readField(currentField, path) {
+        let targetInputElement = document.getElementsByName(path)[0];       //find the HTML element
+        if(targetInputElement != null) {                                    //Make sure we actually found one
+            if(!(currentField.Subfields == null)) {                         //Check if this field has deeper subfields
+                currentField.Subfields.forEach(listElement => {
+                    readField(listElement, path + "." + listElement.Name);  //Recursive function call for subfields
+                });
+                currentField.Subfields = currentField.Subfields.filter((item) => item.value !== undefined); //filter out all subfields that have no value
+                if(currentField.Subfields.length > 0) {                     //if at least one subfield has value, mark the current field to also have a value so it doesn't get filtered
+                    currentField.value = "";
+                }
+            }
 
-            case "Bool":
-                currentField.value = currentField.inputPointer.checked;
-                break;
+            switch(currentField.Type) {                                     //Check type of field
+                case "String":
+                case "Int":
+                case "Map": 
+                    if(targetInputElement.value != "") {                    //These types correspond to an <input type="text">
+                        currentField.value = targetInputElement.value;
+                    }
+                    break;
 
-            default:
-                break;
+                case "Bool":                                                //This corresponds to an <input type="checkbox">
+                    if(targetInputElement.checked) {
+                        currentField.value = true;
+                    }
+                    break;
+
+                default:                                                    //Type List doesn't have a corresponding input, value depends entirely on its subfields
+                    break;
+            }
         }
-
-        if(!(currentField.Subfields == null)) {
-            //Iterate through subfields and generate them recursively
-            currentField.Subfields.forEach(listElement => {
-                readField(listElement);
-            });
-        }
-
-        //delete currentField.inputPointer;
     }
 
-    constFields.forEach(category => {
+    constFieldsClone.forEach(category => {
         category.Fields.forEach(currentField => {
-            readField(currentField);
+            readField(currentField, category.Name + "." + currentField.Name);
         });
+        category.Fields = category.Fields.filter((item) => item.value !== undefined);
     });
 
-    //let constFieldsClone = JSON.parse(JSON.stringify(constFields));
+    constFieldsClone = constFieldsClone.filter((item) => item.Fields.length > 0);
 
-
-    let JSONString = JSON.stringify(constFields);
-    //JSONString = JSONString.replaceAll("\"inputPointer\":{},", "");
-    //JSONString = JSONString.replaceAll("\"inputPointer\":{}", "");
+    let JSONString = JSON.stringify(constFieldsClone);
     return JSONString;
 }
 
