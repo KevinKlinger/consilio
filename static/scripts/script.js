@@ -260,6 +260,7 @@ function handleSubmit(event) {
     sendToServer({ value });
 } */
 
+/** Called when user selects an existing config file to import its values to the form */
 function importFromFile(event) {
     var fileToImportInput = event.target;
     var file_to_read = fileToImportInput.files[0];  //copy reference to selected file
@@ -306,8 +307,12 @@ function importFromFile(event) {
     fileread.readAsText(file_to_read);              //Load file
 }
 
+/** Function that reads all user input from the form, adds the values to the persistent object structure, then returns a JSON string representing the object structure
+ * 
+ * @returns {String} A JSON string representing the object structure with user input values
+ */
 function serializeFormData() {
-    //let constFieldsClone = structuredClone(constFields);
+    //let constFieldsClone = JSON.parse(JSON.stringify(constFields));
 
     function readField(currentField) {
         switch(currentField.Type) {
@@ -350,6 +355,7 @@ function serializeFormData() {
     return JSONString;
 }
 
+/** Prompts user to download current form inputs as a JSON file */
 function saveToFile(event) {
     //Retrieve content from the form
     let content = serializeFormData();
@@ -361,6 +367,7 @@ function saveToFile(event) {
     a.click(); 
 }
 
+/** Sends current form inputs to server as a JSON string */
 function sendToServer(event) {
     //Retrieve content from the form
     let content = serializeFormData();
