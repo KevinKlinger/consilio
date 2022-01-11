@@ -80,9 +80,7 @@ function generateTabs() {
         form.insertBefore(newTabContent, form.firstChild);
 		
         //Iterate through fields to generate input elements
-		category.Fields.sort((a,b) => a.Name.localeCompare(b.Name)).forEach( currentField => {
-            generateInput(currentField, category.Name, document.getElementById("tab" + i));
-		});
+        generateInputs(category.Fields.sort((a,b) => a.Name.localeCompare(b.Name)), category.Name, document.getElementById("tab" + i));
 	});
 }
 
@@ -91,84 +89,84 @@ function generateTabs() {
  * @param {String} path A String describing the path to this field
  * @param {HTMLElement} parent Container for this input to be generated inside of 
  */ 
-function generateInput(currentField, path, parent) {
-    //Create label element that will contain the input element
-	let newFormElementLabel = document.createElement('label');
-    newFormElementLabel.innerHTML = currentField.Name.replaceAll("_", " ");
+function generateInputs(currentSet, path, parent) {
+    currentSet.forEach(currentField => {
+        //Create label element that will contain the input element
+        let newFormElementLabel = document.createElement('label');
+        newFormElementLabel.innerHTML = currentField.Name.replaceAll("_", " ");
 
-    //Create input element
-    let newFormElementInput = document.createElement("input");
-    
-    switch (currentField.Type) {
-        case "String":      //Create a standard text box
-            newFormElementInput.type = "text";
-            break;
-
-        case "Int":         //Create a number selector
-            newFormElementInput.type = "number";
-            //TODO: newFormElementInput.setAttribute("pattern", "[0-9]"); //Make sure only numbers are allowed
-            break;
-
-        case "Bool":        //Create a checkbox
-            newFormElementInput.type = "checkbox";
-
-            newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark the containing label element to NOT use vertical flex alignment
-            break;
-
-        case "List":        //List always has Subfields and requires a button to add additional subfields; Subfield generation happens later
-            newFormElementLabel.dataset.subfieldSets = 1;
-
-            newFormElementInput.type = "button";
-            newFormElementInput.value = "Add new " + currentField.Name + " Element";
-            newFormElementInput.setAttribute("class", "icon iconPlus");
-            newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + path + "." + currentField.Name + ".subfields', event);");
-            break;
-
-        default:    //Fallback (wtf is "map" ???)
-            newFormElementInput.type = "text";
-            break;
-    }
-
-    //add unique identifier to the input field
-    newFormElementInput.name = path + "." + currentField.Name;
-
-    //Mark elements as required if the JSON specifies it
-    //TODO: newFormElementInput.required = currentField.Required; //Disabled for easier Debugging
-
-    //Check library for more human readable names + placeholder and icon
-    if (nameReplacements.has(path + "." + currentField.Name)) {
-        let replacements = nameReplacements.get(path + "." + currentField.Name);
-        newFormElementLabel.title = currentField.Name;  //retain original name of current field as pop-up shown on hover
-        newFormElementLabel.innerHTML = replacements.name;
-        newFormElementInput.setAttribute("placeholder", replacements.placeholder);
-        newFormElementInput.setAttribute("class", replacements.icon);
-    }
-
-    //Add input element to label container
-    newFormElementLabel.appendChild(newFormElementInput);
-
-    //Save a referene to the input HTML element in the Object structure so that we can read its value later when User submits the form
-    //currentField.inputPointer = newFormElementInput;
-
-    //Add label element of currentField and all its children to parent
-    parent.appendChild(newFormElementLabel);
-
-    //Check if the current field has deeper subfields
-    if(!(currentField.Subfields == null)) {
+        //Create input element
+        let newFormElementInput = document.createElement("input");
         
-        //Create container element for all subfields
-        let newSubfieldsContainer = document.createElement('section');
-        newSubfieldsContainer.setAttribute("class", "subfieldsContainer");
-        newSubfieldsContainer.id = path + "." + currentField.Name + ".subfields";
+        switch (currentField.Type) {
+            case "String":      //Create a standard text box
+                newFormElementInput.type = "text";
+                break;
 
-        //Iterate through subfields and generate them recursively
-        currentField.Subfields.sort((a,b) => a.Name.localeCompare(b.Name)).forEach(listElement => {
-            generateInput(listElement, path + "." + currentField.Name, newSubfieldsContainer);
-        });
+            case "Int":         //Create a number selector
+                newFormElementInput.type = "number";
+                //TODO: newFormElementInput.setAttribute("pattern", "[0-9]"); //Make sure only numbers are allowed
+                break;
 
-        //Add subfield container to document
-        parent.appendChild(newSubfieldsContainer);
-    }
+            case "Bool":        //Create a checkbox
+                newFormElementInput.type = "checkbox";
+
+                newFormElementLabel.setAttribute("class", "forCheckbox"); //Mark the containing label element to NOT use vertical flex alignment
+                break;
+
+            case "List":        //List always has Subfields and requires a button to add additional subfields; Subfield generation happens later
+                newFormElementLabel.dataset.subfieldSets = 1;
+
+                newFormElementInput.type = "button";
+                newFormElementInput.value = "Add new " + currentField.Name + " Element";
+                newFormElementInput.setAttribute("class", "icon iconPlus");
+                newFormElementInput.setAttribute("onClick", "duplicateSubfields('" + path + "." + currentField.Name + ".subfields', event);");
+                break;
+
+            default:    //Fallback
+                newFormElementInput.type = "text";
+                break;
+        }
+
+        //add unique identifier to the input field
+        newFormElementInput.name = path + "." + currentField.Name;
+
+        //Mark elements as required if the JSON specifies it
+        //TODO: newFormElementInput.required = currentField.Required; //Disabled for easier Debugging
+
+        //Check library for more human readable names + placeholder and icon
+        if (nameReplacements.has(path + "." + currentField.Name)) {
+            let replacements = nameReplacements.get(path + "." + currentField.Name);
+            newFormElementLabel.title = currentField.Name;  //retain original name of current field as pop-up shown on hover
+            newFormElementLabel.innerHTML = replacements.name;
+            newFormElementInput.setAttribute("placeholder", replacements.placeholder);
+            newFormElementInput.setAttribute("class", replacements.icon);
+        }
+
+        //Add input element to label container
+        newFormElementLabel.appendChild(newFormElementInput);
+
+        //Save a referene to the input HTML element in the Object structure so that we can read its value later when User submits the form
+        //currentField.inputPointer = newFormElementInput;
+
+        //Add label element of currentField and all its children to parent
+        parent.appendChild(newFormElementLabel);
+
+        //Check if the current field has deeper subfields
+        if(!(currentField.Subfields == null)) {
+            
+            //Create container element for all subfields
+            let newSubfieldsContainer = document.createElement('section');
+            newSubfieldsContainer.setAttribute("class", "subfieldsContainer");
+            newSubfieldsContainer.id = path + "." + currentField.Name + ".subfields";
+
+            //Iterate through subfields and generate them recursively
+            generateInputs(currentField.Subfields.sort((a,b) => a.Name.localeCompare(b.Name)), path + "." + currentField.Name, newSubfieldsContainer);
+
+            //Add subfield container to document
+            parent.appendChild(newSubfieldsContainer);
+        }
+    });
 }
 
 /** Creates a clone of the specified subfield container
@@ -265,32 +263,32 @@ function importFromFile(event) {
     var file_to_read = fileToImportInput.files[0];  //copy reference to selected file
     var fileread = new FileReader();                //create file reader helper Object
 
-    function importField(currentField, path) {
-        let targetInputElement = document.getElementsByName(path)[0];
-        if(targetInputElement != null) {
-            
-            switch(currentField.Type) {
-                case "String":
-                case "Int":
-                case "Map":
-                    targetInputElement.value = currentField.value;
-                    break;
-    
-                case "Bool":
-                    targetInputElement.checked = currentField.value;
-                    break;
-    
-                default:
-                    break;
+    function importFields(currentSet, path) {
+        currentSet.forEach(currentField => {
+            let targetInputElement = document.getElementsByName(path + "." + currentField.Name)[0];
+            if(targetInputElement != null) {
+                
+                switch(currentField.Type) {
+                    case "String":
+                    case "Int":
+                    case "Map":
+                        targetInputElement.value = currentField.value;
+                        break;
+        
+                    case "Bool":
+                        targetInputElement.checked = currentField.value;
+                        break;
+        
+                    default:
+                        break;
+                }
+        
+                if(!(currentField.Subfields == null)) {
+                    //Iterate through subfields and generate them recursively
+                    importFields(currentField.Subfields, path + "." + currentField.Name);
+                }
             }
-    
-            if(!(currentField.Subfields == null)) {
-                //Iterate through subfields and generate them recursively
-                currentField.Subfields.forEach(listElement => {
-                    importField(listElement, path + "." + listElement.Name);
-                });
-            }
-        }
+        });
     }
 
     fileread.onload = function(e) {                 //Event triggered when file is finished loading
@@ -298,9 +296,7 @@ function importFromFile(event) {
         FieldsToImport = JSON.parse(content);       // parse json
 
         FieldsToImport.forEach(category => {
-            category.Fields.forEach(currentField => {
-                importField(currentField, category.Name + "." + currentField.Name);
-            });
+            importFields(category.Fields, category.Name);
         });
     };
     fileread.readAsText(file_to_read);              //Load file
@@ -315,44 +311,45 @@ function serializeFormData() {
     let constFieldsClone = JSON.parse(JSON.stringify(constFields));
 
     //Recursively called function that finds corresponding HTML input field and reads its value
-    function readField(currentField, path) {
-        let targetInputElement = document.getElementsByName(path)[0];       //find the HTML element
-        if(targetInputElement != null) {                                    //Make sure we actually found one
-            if(!(currentField.Subfields == null)) {                         //Check if this field has deeper subfields
-                currentField.Subfields.forEach(listElement => {
-                    readField(listElement, path + "." + listElement.Name);  //Recursive function call for subfields
-                });
-                currentField.Subfields = currentField.Subfields.filter((item) => item.value !== undefined); //filter out all subfields that have no value
-                if(currentField.Subfields.length > 0) {                     //if at least one subfield has value, mark the current field to also have a value so it doesn't get filtered
-                    currentField.value = "";
+    function ReadFields(currentSet, path) {
+        currentSet.forEach(currentField => {
+            let targetInputElement = document.getElementsByName(path + "." + currentField.Name)[0];       //find the HTML element
+            if(targetInputElement != null) {                                    //Make sure we actually found one
+
+                if(!(currentField.Subfields == null)) {                         //Check if this field has deeper subfields
+                    ReadFields(currentField.Subfields, path + "." + currentField.Name);  //Recursive function call for subfields
+                    currentField.Subfields = currentField.Subfields.filter((item) => item.value !== undefined); //filter out all subfields that have no value
+                    if(currentField.Subfields.length > 0) {                     //if at least one subfield has value, mark the current field to also have a value so it doesn't get filtered
+                        currentField.value = "";
+                    } else {
+                        delete currentField.Subfields;                          //Delete Subfields property if it is empty. TODO this doesn't seem to work though...
+                    }
+                }
+    
+                switch(currentField.Type) {                                     //Check type of field
+                    case "String":
+                    case "Int":
+                    case "Map": 
+                        if(targetInputElement.value != "") {                    //These types correspond to an <input type="text">
+                            currentField.value = targetInputElement.value;
+                        }
+                        break;
+    
+                    case "Bool":                                                //This corresponds to an <input type="checkbox">
+                        if(targetInputElement.checked) {
+                            currentField.value = true;
+                        }
+                        break;
+    
+                    default:                                                    //Type List doesn't have a corresponding input, value depends entirely on its subfields
+                        break;
                 }
             }
-
-            switch(currentField.Type) {                                     //Check type of field
-                case "String":
-                case "Int":
-                case "Map": 
-                    if(targetInputElement.value != "") {                    //These types correspond to an <input type="text">
-                        currentField.value = targetInputElement.value;
-                    }
-                    break;
-
-                case "Bool":                                                //This corresponds to an <input type="checkbox">
-                    if(targetInputElement.checked) {
-                        currentField.value = true;
-                    }
-                    break;
-
-                default:                                                    //Type List doesn't have a corresponding input, value depends entirely on its subfields
-                    break;
-            }
-        }
+        });
     }
 
     constFieldsClone.forEach(category => {
-        category.Fields.forEach(currentField => {
-            readField(currentField, category.Name + "." + currentField.Name);
-        });
+        ReadFields(category.Fields, category.Name);
         category.Fields = category.Fields.filter((item) => item.value !== undefined);
     });
 
