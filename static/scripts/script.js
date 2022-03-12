@@ -378,20 +378,19 @@ function sendToServer(event) {
 
     // Creating a XHR object
     let xhr = new XMLHttpRequest();
-    let url = "localhost:33334/projects/<ID>";
+    let url = "/projects/1";
     
     // open a connection
-    xhr.open("POST", url, true);
+    xhr.open("GET", url, true);
   
     // Set the request header i.e. which type of content you are sending
     xhr.setRequestHeader("Content-Type", "application/json");
 
     // Create a state change callback
-    xhr.onreadystatechange = function () {
+    xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             alert("Success!");
             // Print received data from server
-            alert("Result: " + this.responseText);
         } else {
             alert("Not Success! ReadyState: " + xhr.readyState + " status code: " + xhr.status);
         }
@@ -415,5 +414,9 @@ class fieldDescriptions {
 
 /** Create each key-value pair for name replacements */
 function setNameReplacements() {
-    nameReplacements.set("libvirt_cloudinit_disk.name", new fieldDescriptions("Cloud disk name", "Name your cloud disk", "icon iconHarddrive"));
+    nameReplacements.set("libvirt_cloudinit_disk.meta_data", new fieldDescriptions("Meta Information", "Set basic meta data", "icon iconHashTag"));
+    nameReplacements.set("libvirt_cloudinit_disk.name", new fieldDescriptions("Cloud disk name", "Give your cloud disk a unique name", "icon iconNameTag"));
+    nameReplacements.set("libvirt_cloudinit_disk.network_config", new fieldDescriptions("Network Configuration", "Set configuration for networking", "icon iconNetwork"));
+    nameReplacements.set("libvirt_cloudinit_disk.pool", new fieldDescriptions("Pool", "Set the pool where this resource will be created", "icon iconHarddrive"));
+    nameReplacements.set("libvirt_cloudinit_disk.user_data", new fieldDescriptions("User Data", "Attach additional meta data", "icon iconCog"));
 }
