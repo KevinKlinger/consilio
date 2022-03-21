@@ -1,5 +1,4 @@
 # consilio
-
 Consilio is an open source application to visualize and manage Terraform configurations and deployments.
 
 
