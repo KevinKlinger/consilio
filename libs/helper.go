@@ -1,36 +1,14 @@
-package libvirt
+package libs
 
 import (
 	"log"
 	"strings"
 
-	libvirtProvider "github.com/dmacvicar/terraform-provider-libvirt/libvirt"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/kevinklinger/consilio/model"
 )
 
-var (
-	provider = libvirtProvider.Provider().(*schema.Provider)
-)
-
-// GetLibvirtFields returns a list of elements the terraform provider for libvirt supports
-func GetLibvirtFields() []model.DynamicElement {
-	var result []model.DynamicElement
-
-	for rscName, rscAttr := range provider.ResourcesMap {
-		fields := extractFields(rscAttr)
-		if len(fields) != 0 {
-			result = append(result, model.DynamicElement{
-				Name:   rscName,
-				Fields: fields,
-			})
-		}
-	}
-
-	return result
-}
-
-func extractFields(rscAttr *schema.Resource) []model.FieldType {
+func ExtractFields(rscAttr *schema.Resource) []model.FieldType {
 	var subfields *[]model.FieldType
 	fields := []model.FieldType{}
 
@@ -57,7 +35,7 @@ func extractFields(rscAttr *schema.Resource) []model.FieldType {
 
 func extractSubFields(subfield interface{}, parentName string) *[]model.FieldType {
 	if elem, ok := subfield.(*schema.Resource); ok {
-		result := extractFields(elem)
+		result := ExtractFields(elem)
 		if len(result) > 0 {
 			return &result
 		}

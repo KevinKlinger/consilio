@@ -3,6 +3,7 @@ module github.com/kevinklinger/consilio
 go 1.14
 
 require (
+	github.com/aliyun/terraform-provider-alicloud v1.161.0
 	github.com/dmacvicar/terraform-provider-libvirt v0.6.3
 	github.com/google/martian/v3 v3.2.1
 	github.com/google/uuid v1.3.0 // indirect
@@ -21,5 +22,4 @@ require (
 	golang.org/x/net v0.0.0-20211116231205-47ca1ff31462 // indirect
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
