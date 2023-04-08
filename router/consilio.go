@@ -26,23 +26,24 @@ type ConsilioRouter struct {
 func (s *ConsilioRouter) routes() {
 
 	// Metadata endpoints
-	s.router.GET("/service", s.mw(s.handleGetService()))
-	s.router.GET("/health", s.mw(s.handleGetHealth()))
-	s.router.GET("/version", s.mw(s.handleGetVersion()))
+	s.router.GET("/service", s.loggerMiddleware(s.handleGetService()))
+	s.router.GET("/health", s.loggerMiddleware(s.handleGetHealth()))
+	s.router.GET("/version", s.loggerMiddleware(s.handleGetVersion()))
 
 	// Project endpoints
-	s.router.POST("/projects", s.mw(s.handleCreateProject()))
-	s.router.PUT("/projects/:id", s.mw(s.handleUpdateProject()))
-	s.router.GET("/projects/:id", s.mw(s.handleGetProject()))
-	s.router.GET("/projects", s.mw(s.handleGetAllProjects()))
+	s.router.POST("/projects", s.loggerMiddleware(s.handleCreateProject()))
+	s.router.PUT("/projects/:id", s.loggerMiddleware(s.handleUpdateProject()))
+	s.router.GET("/projects/:id", s.loggerMiddleware(s.handleGetProject()))
+	s.router.GET("/projects", s.loggerMiddleware(s.handleGetAllProjects()))
 
 	// Action endpoints
 	// TODO receive config here and deploy/destroy/update with Terraform
-	s.router.GET("/test", s.mw(s.convertJSON()))
+	s.router.GET("/test", s.loggerMiddleware(s.convertJSON()))
 
 	// API endpoints
-	s.router.GET("/api", s.mw(s.handleGetAPI()))
-	s.router.OPTIONS("/api", s.mw(s.handleGetAPI()))
+	s.router.GET("/api", s.loggerMiddleware(s.handleGetAPI()))
+	s.router.DELETE("/api/import-state", s.loggerMiddleware(s.deleteImportStateHandler()))
+	s.router.OPTIONS("/api", s.loggerMiddleware(s.handleGetAPI()))
 
 	static := httprouter.New()
 	static.ServeFiles("/*filepath", http.Dir("static"))
@@ -54,7 +55,7 @@ func (s *ConsilioRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.router.ServeHTTP(w, r)
 }
 
-func (s *ConsilioRouter) mw(next httprouter.Handle) httprouter.Handle {
+func (s *ConsilioRouter) loggerMiddleware(next httprouter.Handle) httprouter.Handle {
 	return s.log(next)
 }
 
